@@ -281,10 +281,9 @@ public partial class TwitchConnection : Node
 
 				splitPoint = message.IndexOf(":", 1);
 				ChatMessage chatMessage = new(metadataString, message[(splitPoint + 1)..], chatter);
-				if (chatMessage.Text.StartsWith("!"))
-				{
-					OnChatMessage?.Invoke(chatMessage);
-				}
+
+				OnChatMessage?.Invoke(chatMessage);
+				
 
 				var playerData = PlayerDatas.Find(user => user.Id == chatMessage.UserId);
 				if (playerData == null)

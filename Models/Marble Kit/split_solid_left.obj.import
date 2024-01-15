@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://ruawf6p3cwuq"
+path="res://.godot/imported/split_solid_left.obj-f258a6abf55d580b408790d0ea2bed82.mesh"
+
+[deps]
+
+files=["res://.godot/imported/split_solid_left.obj-f258a6abf55d580b408790d0ea2bed82.mesh"]
+
+source_file="res://Models/Marble Kit/split_solid_left.obj"
+dest_files=["res://.godot/imported/split_solid_left.obj-f258a6abf55d580b408790d0ea2bed82.mesh", "res://.godot/imported/split_solid_left.obj-f258a6abf55d580b408790d0ea2bed82.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://w7pdbtf4xy3v"
+path="res://.godot/imported/helix_right.obj-c0ecda9bbe0782dc553c00db1041bda5.mesh"
+
+[deps]
+
+files=["res://.godot/imported/helix_right.obj-c0ecda9bbe0782dc553c00db1041bda5.mesh"]
+
+source_file="res://Models/Marble Kit/helix_right.obj"
+dest_files=["res://.godot/imported/helix_right.obj-c0ecda9bbe0782dc553c00db1041bda5.mesh", "res://.godot/imported/helix_right.obj-c0ecda9bbe0782dc553c00db1041bda5.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

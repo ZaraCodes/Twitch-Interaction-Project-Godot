@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 public partial class MenuChatMessage : Control
@@ -8,9 +9,9 @@ public partial class MenuChatMessage : Control
 	[Export]
 	private RichTextLabel richMessageLabel;
 
-	public void SetContent(ChatMessage chatMessage)
+	public void SetContent(Dictionary chatMessage)
 	{
-		messageLabel.Text = $"{chatMessage.DisplayName}: {chatMessage.Text}";
+		messageLabel.Text = $"{chatMessage["DisplayName"]}: {chatMessage["Text"]}";
 		//richMessageLabel.Text = $"[color={chatMessage.Color}]{chatMessage.DisplayName}[/color]: {chatMessage.Text}";
     }
 

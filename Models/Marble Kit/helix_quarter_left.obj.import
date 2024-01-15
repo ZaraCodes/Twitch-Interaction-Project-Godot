@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bmwfrh4nrecx5"
+path="res://.godot/imported/helix_quarter_left.obj-28e00e48a145ee689859d9a36effce7b.mesh"
+
+[deps]
+
+files=["res://.godot/imported/helix_quarter_left.obj-28e00e48a145ee689859d9a36effce7b.mesh"]
+
+source_file="res://Models/Marble Kit/helix_quarter_left.obj"
+dest_files=["res://.godot/imported/helix_quarter_left.obj-28e00e48a145ee689859d9a36effce7b.mesh", "res://.godot/imported/helix_quarter_left.obj-28e00e48a145ee689859d9a36effce7b.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

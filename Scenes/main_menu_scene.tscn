@@ -6,8 +6,6 @@
 
 [node name="Main Menu Scene" type="Node3D"]
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
-
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
@@ -31,6 +29,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Main Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu")]
+visible = false
 layout_mode = 2
 script = ExtResource("1_cfgny")
 mainMenu = NodePath(".")
@@ -55,6 +54,11 @@ custom_minimum_size = Vector2(250, 50)
 layout_mode = 2
 text = "Select Level"
 
+[node name="Button" type="Button" parent="CenterContainer/Main Menu/Main Menu Items"]
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+text = "Get Pronouns"
+
 [node name="Settings Button" type="Button" parent="CenterContainer/Main Menu/Main Menu Items"]
 custom_minimum_size = Vector2(250, 50)
 layout_mode = 2
@@ -66,7 +70,6 @@ layout_mode = 2
 text = "Quit"
 
 [node name="Settings Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu", "responseMessage")]
-visible = false
 layout_mode = 2
 script = ExtResource("2_7agve")
 mainMenu = NodePath("../Main Menu")
@@ -80,26 +83,46 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -152.0
-offset_top = -48.0
-offset_right = 152.0
-offset_bottom = 48.0
+offset_left = -247.0
+offset_top = -107.5
+offset_right = 247.0
+offset_bottom = 107.5
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Connect your Twitch Account with this game to play it together with your viewers! To do so, click on [i]Connect Twitch[/i].
+To disconnect, go to your Twitch Account Settings to revoke permissions."
+fit_content = true
+
 [node name="Channel Connect Container" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+visible = false
 layout_mode = 2
 
 [node name="Channel Name Edit" type="LineEdit" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 placeholder_text = "Channel Name"
+editable = false
 caret_blink = true
 
 [node name="Connect Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+disabled = true
 text = "Connect"
+
+[node name="Channel Connect Container2" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+layout_mode = 2
+alignment = 1
+
+[node name="Login Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container2"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Connect Twitch"
 
 [node name="Connection Feedback" type="Label" parent="CenterContainer/Settings Menu/Settings Menu Items"]
 layout_mode = 2
@@ -107,13 +130,22 @@ text = " "
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Back Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
 layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Back Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 text = "Back"
 
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Select Level Button" to="CenterContainer/Main Menu" method="ChangeScene"]
+[connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Button" to="CenterContainer/Main Menu" method="GetPronouns"]
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Settings Button" to="CenterContainer/Main Menu" method="OpenSettingsMenu"]
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Quit Button" to="CenterContainer/Main Menu" method="QuitGame"]
 [connection signal="text_changed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container/Channel Name Edit" to="CenterContainer/Settings Menu" method="SetChannelName"]
 [connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container/Connect Button" to="CenterContainer/Settings Menu" method="ConnectToTwitch"]
-[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Back Button" to="CenterContainer/Settings Menu" method="GoBackToMainMenu"]
+[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container2/Login Button" to="CenterContainer/Settings Menu" method="ConnectToTwitch"]
+[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer/Back Button" to="CenterContainer/Settings Menu" method="GoBackToMainMenu"]

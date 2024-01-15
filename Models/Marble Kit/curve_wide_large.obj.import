@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://5yv42nkvq3ak"
+path="res://.godot/imported/curve_wide_large.obj-1a65617a8976d4e3972059b3c0c4d96d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/curve_wide_large.obj-1a65617a8976d4e3972059b3c0c4d96d.mesh"]
+
+source_file="res://Models/Marble Kit/curve_wide_large.obj"
+dest_files=["res://.godot/imported/curve_wide_large.obj-1a65617a8976d4e3972059b3c0c4d96d.mesh", "res://.godot/imported/curve_wide_large.obj-1a65617a8976d4e3972059b3c0c4d96d.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

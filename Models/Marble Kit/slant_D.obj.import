@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://k5tr08mxyhk2"
+path="res://.godot/imported/slant_D.obj-2a408e579866f84d052d8fcfc44d92e9.mesh"
+
+[deps]
+
+files=["res://.godot/imported/slant_D.obj-2a408e579866f84d052d8fcfc44d92e9.mesh"]
+
+source_file="res://Models/Marble Kit/slant_D.obj"
+dest_files=["res://.godot/imported/slant_D.obj-2a408e579866f84d052d8fcfc44d92e9.mesh", "res://.godot/imported/slant_D.obj-2a408e579866f84d052d8fcfc44d92e9.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

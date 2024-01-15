@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bwt27fkqx7fgc"
+path="res://.godot/imported/rampEnd_solid_D.obj-4198556145d7b424400b8e0c5a6b070d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/rampEnd_solid_D.obj-4198556145d7b424400b8e0c5a6b070d.mesh"]
+
+source_file="res://Models/Marble Kit/rampEnd_solid_D.obj"
+dest_files=["res://.godot/imported/rampEnd_solid_D.obj-4198556145d7b424400b8e0c5a6b070d.mesh", "res://.godot/imported/rampEnd_solid_D.obj-4198556145d7b424400b8e0c5a6b070d.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

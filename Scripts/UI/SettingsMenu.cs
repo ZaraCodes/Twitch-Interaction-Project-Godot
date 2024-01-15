@@ -30,18 +30,19 @@ public partial class SettingsMenu : Control
 	public void ConnectToTwitch()
 	{
         var twitchConnector = GetNode<TwitchConnection>("/root/TwitchConnection");
-        twitchConnector.Channel = channelName;
 
-        twitchConnector.ConnectToTwitch();
-		if (twitchConnector.TwitchClient.Connected)
-		{
-			responseMessage.Text = "Chat connected!";
-		}
-		else
-		{
-			responseMessage.Text = "Connection failed...";
-		}
+		twitchConnector.Authenticated += OnAuthenticated;
+		twitchConnector.AuthenticationFailed += () => responseMessage.Text = "Authentication failed";
+        twitchConnector.Authenticate();
     }
+
+	public void OnAuthenticated()
+	{
+		responseMessage.Text = "Authentication successful";
+
+    }
+
+
 
     public void GoBackToMainMenu()
 	{

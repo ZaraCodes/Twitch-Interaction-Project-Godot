@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c6ki1rbcw1yw8"
+path="res://.godot/imported/end_hole_square.obj-b19a3226d7d261733cefeaf89956d35c.mesh"
+
+[deps]
+
+files=["res://.godot/imported/end_hole_square.obj-b19a3226d7d261733cefeaf89956d35c.mesh"]
+
+source_file="res://Models/Marble Kit/end_hole_square.obj"
+dest_files=["res://.godot/imported/end_hole_square.obj-b19a3226d7d261733cefeaf89956d35c.mesh", "res://.godot/imported/end_hole_square.obj-b19a3226d7d261733cefeaf89956d35c.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

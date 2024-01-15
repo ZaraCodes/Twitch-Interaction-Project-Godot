@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://chjauuhac7rnp"
+path="res://.godot/imported/s-curve_right_large.obj-84ee9fe7a25eae8f0110386c1a87dab6.mesh"
+
+[deps]
+
+files=["res://.godot/imported/s-curve_right_large.obj-84ee9fe7a25eae8f0110386c1a87dab6.mesh"]
+
+source_file="res://Models/Marble Kit/s-curve_right_large.obj"
+dest_files=["res://.godot/imported/s-curve_right_large.obj-84ee9fe7a25eae8f0110386c1a87dab6.mesh", "res://.godot/imported/s-curve_right_large.obj-84ee9fe7a25eae8f0110386c1a87dab6.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

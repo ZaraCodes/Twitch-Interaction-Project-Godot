@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://betdwdwfogo6x"
+path="res://.godot/imported/s-curve_short_left_B.obj-b510cc0c1727d7f437d733d14aeeb824.mesh"
+
+[deps]
+
+files=["res://.godot/imported/s-curve_short_left_B.obj-b510cc0c1727d7f437d733d14aeeb824.mesh"]
+
+source_file="res://Models/Marble Kit/s-curve_short_left_B.obj"
+dest_files=["res://.godot/imported/s-curve_short_left_B.obj-b510cc0c1727d7f437d733d14aeeb824.mesh", "res://.godot/imported/s-curve_short_left_B.obj-b510cc0c1727d7f437d733d14aeeb824.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

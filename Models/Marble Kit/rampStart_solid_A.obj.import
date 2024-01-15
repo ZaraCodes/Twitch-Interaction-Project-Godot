@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://caud1pmf5mqp2"
+path="res://.godot/imported/rampStart_solid_A.obj-1897f829f4bb46fd31edf92b98c84ffb.mesh"
+
+[deps]
+
+files=["res://.godot/imported/rampStart_solid_A.obj-1897f829f4bb46fd31edf92b98c84ffb.mesh"]
+
+source_file="res://Models/Marble Kit/rampStart_solid_A.obj"
+dest_files=["res://.godot/imported/rampStart_solid_A.obj-1897f829f4bb46fd31edf92b98c84ffb.mesh", "res://.godot/imported/rampStart_solid_A.obj-1897f829f4bb46fd31edf92b98c84ffb.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

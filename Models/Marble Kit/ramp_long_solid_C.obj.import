@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://c0r6oare30ndh"
+path="res://.godot/imported/ramp_long_solid_C.obj-92d731972a352c27dd740157f32eecd0.mesh"
+
+[deps]
+
+files=["res://.godot/imported/ramp_long_solid_C.obj-92d731972a352c27dd740157f32eecd0.mesh"]
+
+source_file="res://Models/Marble Kit/ramp_long_solid_C.obj"
+dest_files=["res://.godot/imported/ramp_long_solid_C.obj-92d731972a352c27dd740157f32eecd0.mesh", "res://.godot/imported/ramp_long_solid_C.obj-92d731972a352c27dd740157f32eecd0.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

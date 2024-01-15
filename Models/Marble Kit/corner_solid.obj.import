@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://csi31owtnlgm3"
+path="res://.godot/imported/corner_solid.obj-7a8dfdd2896e19a0bdfde9bdfd76bd1c.mesh"
+
+[deps]
+
+files=["res://.godot/imported/corner_solid.obj-7a8dfdd2896e19a0bdfde9bdfd76bd1c.mesh"]
+
+source_file="res://Models/Marble Kit/corner_solid.obj"
+dest_files=["res://.godot/imported/corner_solid.obj-7a8dfdd2896e19a0bdfde9bdfd76bd1c.mesh", "res://.godot/imported/corner_solid.obj-7a8dfdd2896e19a0bdfde9bdfd76bd1c.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bo6ty7gb2ivvk"
+path="res://.godot/imported/straight.obj-6a52d36a5201f6bc9dbee827c09cd5f6.mesh"
+
+[deps]
+
+files=["res://.godot/imported/straight.obj-6a52d36a5201f6bc9dbee827c09cd5f6.mesh"]
+
+source_file="res://Models/Marble Kit/straight.obj"
+dest_files=["res://.godot/imported/straight.obj-6a52d36a5201f6bc9dbee827c09cd5f6.mesh", "res://.godot/imported/straight.obj-6a52d36a5201f6bc9dbee827c09cd5f6.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

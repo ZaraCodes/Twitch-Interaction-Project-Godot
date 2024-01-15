@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cm6xlf7fvqko0"
+path="res://.godot/imported/wave_solid_C.obj-94e59b4fab0f55a42f68a75d83b5c71f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/wave_solid_C.obj-94e59b4fab0f55a42f68a75d83b5c71f.mesh"]
+
+source_file="res://Models/Marble Kit/wave_solid_C.obj"
+dest_files=["res://.godot/imported/wave_solid_C.obj-94e59b4fab0f55a42f68a75d83b5c71f.mesh", "res://.godot/imported/wave_solid_C.obj-94e59b4fab0f55a42f68a75d83b5c71f.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

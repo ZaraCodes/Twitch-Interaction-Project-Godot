@@ -25,8 +25,14 @@ public partial class MainMenu : Control
 		GetParent().GetParent().QueueFree();
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+	public void GetPronouns()
+	{
+        var twitchGlobals = GetNode<TwitchGlobals>("/root/TwitchGlobals");
+		twitchGlobals.GetPronouns();
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 
 	}

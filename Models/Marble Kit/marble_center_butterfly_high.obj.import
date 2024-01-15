@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://co8r03y5ey4r5"
+path="res://.godot/imported/marble_center_butterfly_high.obj-480e0fd71aee30ef409578b288bd341a.mesh"
+
+[deps]
+
+files=["res://.godot/imported/marble_center_butterfly_high.obj-480e0fd71aee30ef409578b288bd341a.mesh"]
+
+source_file="res://Models/Marble Kit/marble_center_butterfly_high.obj"
+dest_files=["res://.godot/imported/marble_center_butterfly_high.obj-480e0fd71aee30ef409578b288bd341a.mesh", "res://.godot/imported/marble_center_butterfly_high.obj-480e0fd71aee30ef409578b288bd341a.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

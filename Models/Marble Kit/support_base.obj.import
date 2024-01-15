@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bf43hoa1lh5k1"
+path="res://.godot/imported/support_base.obj-3b8aef3972c8053cf0b7b0967df0a7ae.mesh"
+
+[deps]
+
+files=["res://.godot/imported/support_base.obj-3b8aef3972c8053cf0b7b0967df0a7ae.mesh"]
+
+source_file="res://Models/Marble Kit/support_base.obj"
+dest_files=["res://.godot/imported/support_base.obj-3b8aef3972c8053cf0b7b0967df0a7ae.mesh", "res://.godot/imported/support_base.obj-3b8aef3972c8053cf0b7b0967df0a7ae.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

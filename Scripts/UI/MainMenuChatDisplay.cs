@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 public partial class MainMenuChatDisplay : Control
@@ -17,7 +18,7 @@ public partial class MainMenuChatDisplay : Control
 		twitchConnection.OnChatMessage -= ShowMessageOnScreen;
 	}
 
-	private void ShowMessageOnScreen(ChatMessage chatMessage)
+	private void ShowMessageOnScreen(Dictionary chatMessage)
 	{
 		var node = GD.Load<PackedScene>("res://Scenes/MainMenuChatMessage.tscn").Instantiate();
 		AddChild(node);
@@ -38,9 +39,9 @@ public partial class MainMenuChatDisplay : Control
 	{
 	}
 
-    public override void _ExitTree()
-    {
+	public override void _ExitTree()
+	{
 		RemoveMessageHandler();
-        base._ExitTree();
-    }
+		base._ExitTree();
+	}
 }

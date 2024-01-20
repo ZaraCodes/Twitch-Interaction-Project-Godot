@@ -29,7 +29,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Main Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu")]
-visible = false
 layout_mode = 2
 script = ExtResource("1_cfgny")
 mainMenu = NodePath(".")
@@ -70,6 +69,7 @@ layout_mode = 2
 text = "Quit"
 
 [node name="Settings Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu", "responseMessage")]
+visible = false
 layout_mode = 2
 script = ExtResource("2_7agve")
 mainMenu = NodePath("../Main Menu")

@@ -11,9 +11,11 @@ script = ExtResource("1_vlwqc")
 boxContainer = NodePath("Player Display")
 label = NodePath("Player Display/RichTextLabel")
 rigidBody = NodePath("Marble")
-badges = [NodePath("Player Display/Badge 1"), NodePath("Player Display/Badge 2"), NodePath("Player Display/Badge 3")]
+badges = [NodePath("Player Display/VBoxContainer/Badge 3"), NodePath("Player Display/VBoxContainer2/Badge 2"), NodePath("Player Display/VBoxContainer3/Badge 1")]
+offset = Vector2(0, -10)
 
 [node name="Marble" type="RigidBody3D" parent="."]
+mass = 4.0
 freeze = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Marble"]
@@ -23,16 +25,6 @@ shape = SubResource("SphereShape3D_xehja")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Marble"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 mesh = ExtResource("1_lolmh")
-
-[node name="Label3D" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.120787, 0)
-visible = false
-pixel_size = 0.001
-offset = Vector2(0, 25)
-billboard = 1
-no_depth_test = true
-fixed_size = true
-text = "Player Name"
 
 [node name="Player Display" type="HBoxContainer" parent="."]
 anchors_preset = 8
@@ -48,18 +40,29 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 
-[node name="Badge 3" type="TextureRect" parent="Player Display"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Player Display"]
+layout_mode = 2
+alignment = 1
+
+[node name="Badge 3" type="TextureRect" parent="Player Display/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Badge 2" type="TextureRect" parent="Player Display"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Player Display"]
+layout_mode = 2
+alignment = 1
+
+[node name="Badge 2" type="TextureRect" parent="Player Display/VBoxContainer2"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 0
 
-[node name="Badge 1" type="TextureRect" parent="Player Display"]
-visible = false
+[node name="VBoxContainer3" type="VBoxContainer" parent="Player Display"]
+layout_mode = 2
+alignment = 1
+
+[node name="Badge 1" type="TextureRect" parent="Player Display/VBoxContainer3"]
 layout_mode = 2
 size_flags_vertical = 0
 

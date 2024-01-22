@@ -25,7 +25,7 @@ public partial class MarbleTrack : Node3D
 
     private PackedScene packedMarbleScene;
 
-    public Camera3D camera { get; private set; }
+    private TrackManager trackManager;
     #endregion
 
     #region Methods
@@ -41,7 +41,6 @@ public partial class MarbleTrack : Node3D
 
     private void InitTitleBar()
     {
-        TrackManager trackManager = GetParent<TrackManager>();
         trackManager.TitleBar.PlayerNumbers.Text = $"{playerCount}/{maxPlayerCount}";
         trackManager.TitleBar.MapName.Text = MapName;
         trackManager.InitLevel(this);
@@ -55,13 +54,14 @@ public partial class MarbleTrack : Node3D
         {
             string text = (string)value;
             if (!text.StartsWith("!play")) return;
+            if (spawnPoints.Count < 1) return;
 
             TwitchGlobals.AddPlayerData(message);
-            SpawnMarble((string)message["UserId"], (string)message["Badges"]);
+            SpawnMarble(message);
         }
     }
 
-    public void SpawnMarble(string id, string badges)
+    public void SpawnMarble(Dictionary message)
     {
         PlayerMarble newMarble = (PlayerMarble)packedMarbleScene.Instantiate();
         marblesParent.AddChild(newMarble);
@@ -69,22 +69,35 @@ public partial class MarbleTrack : Node3D
         int index = GD.RandRange(0, spawnPoints.Count - 1);
         Vector3 spawnPoint = spawnPoints[index];
         spawnPoints.Remove(spawnPoint);
+        trackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
 
         newMarble.Position = spawnPoint;
-        newMarble.InitMarble(id, badges, this);
+        newMarble.InitMarble((string)message["UserId"], (string)message["Badges"], this);
+
+        trackManager.CreateSpawnMessage((string)message["DisplayName"], (string)message["Color"]);
     }
 
     public void SpawnMarble(string id, string DisplayName, string color)
     {
         TwitchGlobals.AddPlayerData(id, DisplayName, color);
     }
+
+    public void StartGame()
+    {
+        allowMarblesSpawning = false;
+
+        foreach (PlayerMarble marble in marblesParent.GetChildren())
+        {
+            marble.SetFreeze(false);
+        }
+    }
     #endregion
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        trackManager = GetParent<TrackManager>();
         TwitchGlobals = GetNode<TwitchGlobals>("/root/TwitchGlobals");
-        camera = GetParent().GetParent().GetChild<Camera3D>(0);
         var twitchConnection = GetNode<TwitchConnection>("/root/TwitchConnection");
 
         twitchConnection.OnChatMessage += HandleJoinMessage;

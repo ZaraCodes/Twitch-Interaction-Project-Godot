@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://rimsm6wwtqtt"]
+
+[ext_resource type="Script" path="res://Scripts/UI/JoinMessage.cs" id="1_feabu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rk5j"]
+
+[sub_resource type="Theme" id="Theme_b2qa6"]
+/styles/JoinMessageStyleBox = SubResource("StyleBoxFlat_5rk5j")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_71jix"]
+bg_color = Color(0.6, 0.6, 0.6, 0.501961)
+border_width_left = 2
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="Join Message" type="Panel" node_paths=PackedStringArray("panel", "label")]
+custom_minimum_size = Vector2(50, 25)
+offset_right = 165.0
+offset_bottom = 25.0
+theme = SubResource("Theme_b2qa6")
+script = ExtResource("1_feabu")
+maxAge = 8.0
+panel = NodePath(".")
+style = SubResource("StyleBoxFlat_71jix")
+label = NodePath("VBoxContainer/RichTextLabel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+clip_contents = true
+layout_mode = 0
+offset_left = 5.0
+offset_right = 395.0
+offset_bottom = 25.0
+alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=REPLACE][b]PlayerName[/b][color=white] joined!"
+fit_content = true
+scroll_active = false

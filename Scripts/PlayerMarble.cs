@@ -9,6 +9,7 @@ public partial class PlayerMarble : Node3D
 	[Export] private RichTextLabel label;
 	[Export] private RigidBody3D rigidBody;
 	[Export] private TextureRect[] badges;
+	[Export] private Vector2 offset;
 	#endregion
 
 	#region Methods
@@ -34,25 +35,25 @@ public partial class PlayerMarble : Node3D
 		foreach (string badge in badges.Split(','))
 		{
 			GD.Print($"[InitMarble] Marble {Name}: Getting badge {badge}");
-			if (badge.Contains("subscriber")) continue;
+			//if (badge.Contains("subscriber")) continue;
 			if (!twitchGlobals.TryGetBadge(badge, out ImageTexture imageTexture))
 			{
 				twitchGlobals.DownloadBadge(badge);
 				await ToSignal(twitchGlobals, TwitchGlobals.SignalName.BadgeDownloaded);
-                if (!twitchGlobals.TryGetBadge(badge, out imageTexture))
+				if (!twitchGlobals.TryGetBadge(badge, out imageTexture))
 				{
 					GD.Print($"[InitMarble] Marble {Name}: Badge {badge} not available");
 					continue;
 				}
-            }
-            if (imageTexture != null && numberOfBadges < badges.Length)
-            {
+			}
+			if (imageTexture != null && numberOfBadges < badges.Length)
+			{
 				GD.Print($"[InitMarble] Marble {Name}: Applying {badge}");
-                this.badges[numberOfBadges].Texture = imageTexture;
-                this.badges[numberOfBadges].Visible = true;
-                numberOfBadges++;
-            }
-		}
+				this.badges[numberOfBadges].Texture = imageTexture;
+				this.badges[numberOfBadges].Visible = true;
+				numberOfBadges++;
+			}
+		}	
 	}
 
 	public void ShowPlayerCard()
@@ -60,9 +61,14 @@ public partial class PlayerMarble : Node3D
 
 	}
 
+	public void SetFreeze(bool freeze)
+	{
+		rigidBody.Freeze = freeze;
+	}
+
 	private void UpdateLabelPosition()
 	{
-		boxContainer.GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(rigidBody.GlobalPosition);
+		boxContainer.GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(rigidBody.GlobalPosition) - new Vector2(boxContainer.Size.X, 2 * boxContainer.Size.Y) / 2f;
 	}
 	#endregion
 

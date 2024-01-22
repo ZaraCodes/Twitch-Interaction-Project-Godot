@@ -81,7 +81,7 @@ public partial class TwitchGlobals : Node
 
         var request = new HttpRequest();
         AddChild(request);
-        GD.Print($"[DownloadBadge] Downloading badge {badge}");
+        GD.Print($"[DownloadBadge] Downloading badge {badge} from {downloadURL}");
         request.Timeout = 5;
         request.Request(downloadURL);
         var result = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);

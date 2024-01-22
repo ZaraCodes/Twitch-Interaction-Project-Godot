@@ -7,6 +7,8 @@ public partial class TrackManager : Node3D
 	public MarbleTrack MarbleTrack { get; private set; }
 
 	[Export] public TitleBar TitleBar { get; private set; }
+
+	[Export] public SpectatorCam Camera { get; private set; }
 	#endregion
 
 	#region Methods

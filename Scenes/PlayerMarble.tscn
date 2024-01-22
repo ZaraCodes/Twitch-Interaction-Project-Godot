@@ -75,3 +75,5 @@ text = "Player Name"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+
+[connection signal="gui_input" from="Player Display" to="." method="SetViewTarget"]

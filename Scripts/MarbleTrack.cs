@@ -25,7 +25,7 @@ public partial class MarbleTrack : Node3D
 
     private PackedScene packedMarbleScene;
 
-    private TrackManager trackManager;
+    public TrackManager TrackManager;
     #endregion
 
     #region Methods
@@ -41,9 +41,9 @@ public partial class MarbleTrack : Node3D
 
     private void InitTitleBar()
     {
-        trackManager.TitleBar.PlayerNumbers.Text = $"{playerCount}/{maxPlayerCount}";
-        trackManager.TitleBar.MapName.Text = MapName;
-        trackManager.InitLevel(this);
+        TrackManager.TitleBar.PlayerNumbers.Text = $"{playerCount}/{maxPlayerCount}";
+        TrackManager.TitleBar.MapName.Text = MapName;
+        TrackManager.InitLevel(this);
     }
 
     public void HandleJoinMessage(Dictionary message)
@@ -69,12 +69,12 @@ public partial class MarbleTrack : Node3D
         int index = GD.RandRange(0, spawnPoints.Count - 1);
         Vector3 spawnPoint = spawnPoints[index];
         spawnPoints.Remove(spawnPoint);
-        trackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
+        TrackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
 
         newMarble.Position = spawnPoint;
         newMarble.InitMarble((string)message["UserId"], (string)message["Badges"], this);
 
-        trackManager.CreateSpawnMessage((string)message["DisplayName"], (string)message["Color"]);
+        TrackManager.CreateSpawnMessage((string)message["DisplayName"], (string)message["Color"]);
     }
 
     public void SpawnMarble(string id, string DisplayName, string color)
@@ -96,7 +96,7 @@ public partial class MarbleTrack : Node3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        trackManager = GetParent<TrackManager>();
+        TrackManager = GetParent<TrackManager>();
         TwitchGlobals = GetNode<TwitchGlobals>("/root/TwitchGlobals");
         var twitchConnection = GetNode<TwitchConnection>("/root/TwitchConnection");
 

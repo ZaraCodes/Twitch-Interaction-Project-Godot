@@ -38,11 +38,15 @@ sky = SubResource("Sky_as75k")
 
 [node name="Game Scene" type="Node3D"]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.0157073, 0.728879, -0.684463, 0, 0.684547, 0.728969, 0.999877, -0.0114501, 0.0107524, -1.40894, 26.6501, 4.59889)
+[node name="Cam Rotation Point" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Cam Rotation Point" node_paths=PackedStringArray("RotationPoint")]
+transform = Transform3D(0.0157073, 0.728879, -0.684463, 0, 0.684547, 0.728969, 0.999877, -0.0114501, 0.0107524, -2.29185, 24.2501, 3.45168)
 attributes = SubResource("CameraAttributesPractical_uhc48")
 script = ExtResource("1_yy68x")
 speed = 10.0
+RotationPoint = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.294341, 0.955701, 0, -0.955701, 0.294341, 2.04499, 3.01934, -0.601065)
@@ -159,7 +163,7 @@ alignment = 1
 
 [node name="Start Game Button" type="Button" parent="UI/Title Bar/HBoxContainer"]
 layout_mode = 2
-text = "   Start Game   "
+text = "   Start Race!   "
 
 [node name="Join Button" type="Button" parent="UI/Title Bar/HBoxContainer"]
 layout_mode = 2
@@ -177,9 +181,10 @@ grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(400, 0)
 
-[node name="Track Manager" type="Node3D" parent="." node_paths=PackedStringArray("TitleBar")]
+[node name="Track Manager" type="Node3D" parent="." node_paths=PackedStringArray("TitleBar", "Camera")]
 script = ExtResource("3_0buyu")
 TitleBar = NodePath("../UI/Title Bar")
+Camera = NodePath("../Cam Rotation Point/Camera3D")
 
 [node name="MarbleTrack" type="Node3D" parent="Track Manager" node_paths=PackedStringArray("spawnPointParent", "marblesParent")]
 script = ExtResource("2_qytxm")

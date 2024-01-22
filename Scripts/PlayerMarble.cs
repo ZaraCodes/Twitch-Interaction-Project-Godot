@@ -69,6 +69,7 @@ public partial class PlayerMarble : Node3D
 	private void UpdateLabelPosition()
 	{
 		boxContainer.GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(rigidBody.GlobalPosition) - new Vector2(boxContainer.Size.X, 2 * boxContainer.Size.Y) / 2f;
+		boxContainer.Visible = !GetViewport().GetCamera3D().IsPositionBehind(rigidBody.GlobalPosition);
 	}
 	#endregion
 

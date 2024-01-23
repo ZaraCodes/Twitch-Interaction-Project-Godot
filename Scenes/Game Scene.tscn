@@ -39,7 +39,6 @@ sky = SubResource("Sky_as75k")
 [node name="Game Scene" type="Node3D"]
 
 [node name="Cam Rotation Point" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Cam Rotation Point" node_paths=PackedStringArray("RotationPoint")]
 transform = Transform3D(0.0157073, 0.728879, -0.684463, 0, 0.684547, 0.728969, 0.999877, -0.0114501, 0.0107524, -2.29185, 24.2501, 3.45168)

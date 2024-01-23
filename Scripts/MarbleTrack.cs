@@ -6,109 +6,131 @@ using System.Linq;
 
 public partial class MarbleTrack : Node3D
 {
-    #region Fields
-    public TwitchGlobals TwitchGlobals { get; private set; }
-    /// <summary>Array that contains all points on the track where marbles can spawn</summary>
-    private List<Vector3> spawnPoints;
+	#region Fields
+	public TwitchGlobals TwitchGlobals { get; private set; }
+	/// <summary>Array that contains all points on the track where marbles can spawn</summary>
+	private List<Vector3> spawnPoints;
 
-    [Export] public string MapName { get; private set; }
-    /// <summary>Node that is the parent of the spawnpoints</summary>
-    [Export] private Node3D spawnPointParent;
+	[Export] public string MapName { get; private set; }
+	/// <summary>Node that is the parent of the spawnpoints</summary>
+	[Export] private Node3D spawnPointParent;
 
-    [Export] private Node3D marblesParent;
+	[Export] private Node3D marblesParent;
 
-    private bool allowMarblesSpawning;
+	private bool allowMarblesSpawning;
 
-    private int maxPlayerCount;
+	private int maxPlayerCount;
 
-    private int playerCount;
+	private int playerCount;
 
-    private PackedScene packedMarbleScene;
+	private PackedScene packedMarbleScene;
 
-    public TrackManager TrackManager;
-    #endregion
+	public TrackManager TrackManager;
 
-    #region Methods
-    private void InitSpawnpoints()
-    {
-        spawnPoints = new();
-        foreach (Node3D spawnPoint in spawnPointParent.GetChildren().Cast<Node3D>())
-        {
-            spawnPoints.Add(spawnPoint.GlobalPosition);
-        }
-        maxPlayerCount = spawnPoints.Count;
-    }
+	private RandomNumberGenerator rng;
+	#endregion
 
-    private void InitTitleBar()
-    {
-        TrackManager.TitleBar.PlayerNumbers.Text = $"{playerCount}/{maxPlayerCount}";
-        TrackManager.TitleBar.MapName.Text = MapName;
-        TrackManager.InitLevel(this);
-    }
+	#region Methods
+	private void InitSpawnpoints()
+	{
+		spawnPoints = new();
+		foreach (Node3D spawnPoint in spawnPointParent.GetChildren().Cast<Node3D>())
+		{
+			spawnPoints.Add(spawnPoint.GlobalPosition);
+		}
+		maxPlayerCount = spawnPoints.Count;
+	}
 
-    public void HandleJoinMessage(Dictionary message)
-    {
-        if (!allowMarblesSpawning) return;
+	private void InitTitleBar()
+	{
+		TrackManager.TitleBar.PlayerNumbers.Text = $"{playerCount}/{maxPlayerCount}";
+		TrackManager.TitleBar.MapName.Text = MapName;
+		TrackManager.InitLevel(this);
+	}
 
-        if (message.TryGetValue("Text", out var value))
-        {
-            string text = (string)value;
-            if (!text.StartsWith("!play")) return;
-            if (spawnPoints.Count < 1) return;
+	public void HandleJoinMessage(Dictionary message)
+	{
+		if (!allowMarblesSpawning) return;
 
-            TwitchGlobals.AddPlayerData(message);
-            SpawnMarble(message);
-        }
-    }
+		if (message.TryGetValue("Text", out var value))
+		{
+			string text = (string)value;
+			if (!text.StartsWith("!play")) return;
+			if (spawnPoints.Count < 1) return;
 
-    public void SpawnMarble(Dictionary message)
-    {
-        PlayerMarble newMarble = (PlayerMarble)packedMarbleScene.Instantiate();
-        marblesParent.AddChild(newMarble);
+			TwitchGlobals.AddPlayerData(message);
+			SpawnMarble(message);
+		}
+	}
 
-        int index = GD.RandRange(0, spawnPoints.Count - 1);
-        Vector3 spawnPoint = spawnPoints[index];
-        spawnPoints.Remove(spawnPoint);
-        TrackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
+	public void SpawnMarble(Dictionary message)
+	{
+		PlayerMarble newMarble = (PlayerMarble)packedMarbleScene.Instantiate();
+		marblesParent.AddChild(newMarble);
 
-        newMarble.Position = spawnPoint;
-        newMarble.InitMarble((string)message["UserId"], (string)message["Badges"], this);
+		int index = GD.RandRange(0, spawnPoints.Count - 1);
+		Vector3 spawnPoint = spawnPoints[index];
+		spawnPoints.Remove(spawnPoint);
+		TrackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
 
-        TrackManager.CreateSpawnMessage((string)message["DisplayName"], (string)message["Color"]);
-    }
+		newMarble.Position = spawnPoint;
+		newMarble.InitMarble((string)message["UserId"], (string)message["Badges"], this);
 
-    public void SpawnMarble(string id, string DisplayName, string color)
-    {
-        TwitchGlobals.AddPlayerData(id, DisplayName, color);
-    }
+		TrackManager.CreateSpawnMessage((string)message["DisplayName"], (string)message["Color"]);
+	}
 
-    public void StartGame()
-    {
-        allowMarblesSpawning = false;
+	public void SpawnMarble(string id, string DisplayName, string color)
+	{
+		TwitchGlobals.AddPlayerData(id, DisplayName, color);
+		PlayerMarble newMarble = (PlayerMarble)packedMarbleScene.Instantiate();
+		marblesParent.AddChild(newMarble);
 
-        foreach (PlayerMarble marble in marblesParent.GetChildren())
-        {
-            marble.SetFreeze(false);
-        }
-    }
-    #endregion
+		int index = rng.RandiRange(0, spawnPoints.Count - 1);
+		Vector3 spawnPoint = spawnPoints[index];
+		spawnPoints.Remove(spawnPoint);
+		TrackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
+		newMarble.Position = spawnPoint;
+		newMarble.InitMarble(id, "", this);
+	}
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        TrackManager = GetParent<TrackManager>();
-        TwitchGlobals = GetNode<TwitchGlobals>("/root/TwitchGlobals");
-        var twitchConnection = GetNode<TwitchConnection>("/root/TwitchConnection");
+	public void TestTrack()
+	{
+		for (int i = 0; i < maxPlayerCount; i++)
+		{
+			var color = new Color(rng.Randf(), rng.Randf(), rng.Randf());
+			var name = $"Test Marble {i}";
+			SpawnMarble(i.ToString(), name, color.ToHtml());
+		}
+	}
 
-        twitchConnection.OnChatMessage += HandleJoinMessage;
-        InitSpawnpoints();
-        InitTitleBar();
-        packedMarbleScene = GD.Load<PackedScene>("res://Scenes/PlayerMarble.tscn");
-        allowMarblesSpawning = true;
-    }
+	public void StartGame()
+	{
+		allowMarblesSpawning = false;
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-    }
+		foreach (PlayerMarble marble in marblesParent.GetChildren())
+		{
+			marble.SetFreeze(false);
+		}
+	}
+	#endregion
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		TrackManager = GetParent<TrackManager>();
+		TwitchGlobals = GetNode<TwitchGlobals>("/root/TwitchGlobals");
+		var twitchConnection = GetNode<TwitchConnection>("/root/TwitchConnection");
+
+		twitchConnection.OnChatMessage += HandleJoinMessage;
+		InitSpawnpoints();
+		InitTitleBar();
+		packedMarbleScene = GD.Load<PackedScene>("res://Scenes/PlayerMarble.tscn");
+		allowMarblesSpawning = true;
+		rng = new();
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+	}
 }

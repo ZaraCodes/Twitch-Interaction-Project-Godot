@@ -6,11 +6,17 @@ public partial class SpectatorCam : Camera3D
     [Export]
     private float speed = 5f;
     [Export]
+    private float maxSpeed = 50f;
+    [Export]
+    private float minDistanceToMarble = 1f;
+    [Export]
     private Node3D RotationPoint;
 
     private Vector2 mouseMovement;
 
     private float rotationX;
+
+    private float speedDiff;
 
     private Vector2 mouseCoords;
     private Vector2 mouseCoordsCache;
@@ -18,6 +24,34 @@ public partial class SpectatorCam : Camera3D
     private Node3D referencedMarble;
 
     private void Move(double delta)
+    {
+        HandleRotation(delta);
+        HandleMovement(delta);
+
+        if (speedDiff != 0f)
+        {
+            speed += speedDiff * (float)delta;
+            if (speed > maxSpeed) speed = maxSpeed;
+            else if (speed < 0) speed = 0;
+            speedDiff = 0f;
+        }
+    }
+
+    private void HandleMovement(double delta)
+    {
+        var direction = GetMovementVector();
+        if (direction.Length() <= 0) return;
+
+        if (referencedMarble == null)
+            Position += (direction.X * Basis.X + direction.Z * Basis.Z + new Vector3(0, direction.Y, 0)) * speed * (float)delta;
+        else
+        {
+            Position += direction.Z * Basis.Z * speed * (float)delta;
+            RotationPoint.Rotate(Vector3.Up, direction.X * (float)delta);
+        }
+    }
+
+    private void HandleRotation(double delta)
     {
         if (Input.IsActionPressed("rotate_camera"))
         {
@@ -46,11 +80,6 @@ public partial class SpectatorCam : Camera3D
             Input.MouseMode = Input.MouseModeEnum.Visible;
             GetViewport().WarpMouse(mouseCoords);
         }
-
-        var direction = GetMovementVector();
-        if (direction.Length() <= 0) return;
-
-        Position += (direction.X * Basis.X + direction.Z * Basis.Z + new Vector3(0, direction.Y, 0)) * speed * (float)delta;
     }
 
     public void SetReferenceMarble(Node3D marble)
@@ -81,11 +110,39 @@ public partial class SpectatorCam : Camera3D
             if (Input.MouseMode == Input.MouseModeEnum.Visible) mouseCoords = motionEvent.Position;
             mouseMovement = motionEvent.Relative * 0.33f;
         }
+        if (@event is InputEventMouseButton buttonEvent)
+        {
+            if (buttonEvent.ButtonIndex == MouseButton.WheelUp)
+            {
+                speedDiff = buttonEvent.Factor * 75f;
+            }
+            else if (buttonEvent.ButtonIndex == MouseButton.WheelDown)
+            {
+                speedDiff = -buttonEvent.Factor * 75f;
+            }
+        }
     }
 
     public override void _PhysicsProcess(double delta)
     {
         Move(delta);
+        if (Input.IsActionJustPressed("unfollow_cam"))
+        {
+            referencedMarble = null;
+            var globalPos = GlobalPosition;
+            var globalRot = GlobalRotation;
+            RotationPoint.Rotation = Vector3.Zero;
+            RotationPoint.Position = Vector3.Zero;
+            Rotation = globalRot;
+            Position = globalPos;
+        }
+        if (referencedMarble != null)
+        {
+            if (Position.Z < minDistanceToMarble)
+            {
+                Position = new(0, 0, minDistanceToMarble);
+            }
+        }
     }
 
     // Called when the node enters the scene tree for the first time.

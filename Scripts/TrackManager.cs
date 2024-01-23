@@ -17,6 +17,11 @@ public partial class TrackManager : Node3D
 		MarbleTrack = marbleTrack;
 	}
 
+	public void TestTrack()
+	{
+		MarbleTrack.TestTrack();
+	}
+
 	/// <summary>
 	/// Stops the ability for players to join and starts physics simulations for all the marbles
 	/// </summary>

@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/PlayerMarble.cs" id="1_vlwqc"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xehja"]
-radius = 0.209089
+radius = 0.25
 
 [node name="PlayerMarble" type="Node3D" node_paths=PackedStringArray("boxContainer", "label", "rigidBody", "badges")]
 script = ExtResource("1_vlwqc")
@@ -15,6 +15,7 @@ badges = [NodePath("Player Display/VBoxContainer/Badge 3"), NodePath("Player Dis
 offset = Vector2(0, -10)
 
 [node name="Marble" type="RigidBody3D" parent="."]
+mass = 100.0
 freeze = true
 continuous_cd = true
 
@@ -23,7 +24,7 @@ transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 shape = SubResource("SphereShape3D_xehja")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Marble"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 mesh = ExtResource("1_lolmh")
 
 [node name="Player Display" type="HBoxContainer" parent="."]
@@ -77,3 +78,4 @@ scroll_active = false
 autowrap_mode = 0
 
 [connection signal="gui_input" from="Player Display" to="." method="SetViewTarget"]
+[connection signal="gui_input" from="Player Display/RichTextLabel" to="." method="SetViewTarget"]

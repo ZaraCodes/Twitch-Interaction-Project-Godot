@@ -13,7 +13,7 @@ public partial class MenuChatMessage : Control
 	{
 		messageLabel.Text = $"{chatMessage["DisplayName"]}: {chatMessage["Text"]}";
 		//richMessageLabel.Text = $"[color={chatMessage.Color}]{chatMessage.DisplayName}[/color]: {chatMessage.Text}";
-    }
+	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

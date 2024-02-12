@@ -15,12 +15,13 @@ public partial class JoinMessage : Panel
 	[Export]
 	private RichTextLabel label;
 
-	public void Init(string name, Color color)
+	public void Init(string name, Color color, string action)
 	{
 		var newStyle = (StyleBoxFlat)style.Duplicate();
 		newStyle.BorderColor = color;
 		label.Text = label.Text.Replace("REPLACE", color.ToHtml());
 		label.Text = label.Text.Replace("PlayerName", name);
+		label.Text = label.Text.Replace("ACTION", action);
 
 		panel.AddThemeStyleboxOverride("panel", newStyle);
 		

@@ -17,6 +17,8 @@ public partial class MarbleTrack : Node3D
 
 	[Export] private Node3D marblesParent;
 
+	[Export] public float DeathHeight { get; private set; }
+
 	private bool allowMarblesSpawning;
 
 	private int maxPlayerCount;
@@ -28,6 +30,8 @@ public partial class MarbleTrack : Node3D
 	public TrackManager TrackManager;
 
 	private RandomNumberGenerator rng;
+
+	public int CurrentPlayerCount;
 	#endregion
 
 	#region Methods

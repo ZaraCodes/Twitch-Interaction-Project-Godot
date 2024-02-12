@@ -37,6 +37,6 @@ alignment = 1
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2
 bbcode_enabled = true
-text = "[color=REPLACE][b]PlayerName[/b][color=white] joined!"
+text = "[color=REPLACE][b]PlayerName[/b][color=white] ACTION"
 fit_content = true
 scroll_active = false

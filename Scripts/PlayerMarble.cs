@@ -10,6 +10,8 @@ public partial class PlayerMarble : Node3D
 	[Export] private RigidBody3D rigidBody;
 	[Export] private TextureRect[] badges;
 	[Export] private Vector2 offset;
+	private string playerName;
+	private string color;
 	#endregion
 
 	#region Methods
@@ -24,10 +26,16 @@ public partial class PlayerMarble : Node3D
 		if (user == null) return;
 
 		if (user.TryGetValue("Color", out var Color))
+		{
 			label.AppendText($"[color={(string)Color}]");
+			color = (string)Color;
+		}
 
 		if (user.TryGetValue("DisplayName", out var DisplayName))
+		{
 			label.AppendText((string)DisplayName);
+			playerName = (string)DisplayName;
+		}
 		else
 			label.AppendText("<ERROR>");
 
@@ -57,22 +65,32 @@ public partial class PlayerMarble : Node3D
 		}
 	}
 
-	public void ShowPlayerCard()
-	{
-
-	}
-
 	public void SetViewTarget(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton button)
 		{
 			if (button.ButtonIndex == MouseButton.Left && button.IsPressed())
 			{
-				GD.Print($"View Target Set! {button.ButtonIndex}");
-
 				var cam = marbleTrack.TrackManager.Camera;
-				cam.SetReferenceMarble(rigidBody);
-			}
+				cam.SetReferenceMarble(rigidBody, ID);
+                // marbleTrack.TrackManager.ShowCard(ID);
+            }
+		}
+	}
+
+	private bool IsBelowDeathLevel()
+	{
+		return marbleTrack.DeathHeight > rigidBody.GlobalPosition.Y;
+	}
+
+	private void CheckDeathPlane()
+	{
+		if (IsBelowDeathLevel())
+		{
+			marbleTrack.TrackManager.TitleBar.CreateFallMessage(playerName, color);
+			if (marbleTrack.TrackManager.Camera.RefId == ID) marbleTrack.TrackManager.Camera.UnfollowCam();
+
+            Free();
 		}
 	}
 
@@ -98,5 +116,6 @@ public partial class PlayerMarble : Node3D
 	public override void _Process(double delta)
 	{
 		UpdateLabelPosition();
+		CheckDeathPlane();
 	}
 }

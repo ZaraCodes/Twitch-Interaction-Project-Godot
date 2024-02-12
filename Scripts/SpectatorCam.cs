@@ -23,6 +23,8 @@ public partial class SpectatorCam : Camera3D
 
 	private Node3D referencedMarble;
 
+	public string RefId { get; set; }
+
 	private void Move(double delta)
 	{
 		HandleRotation(delta);
@@ -82,11 +84,12 @@ public partial class SpectatorCam : Camera3D
 		}
 	}
 
-	public void SetReferenceMarble(Node3D marble)
+	public void SetReferenceMarble(Node3D marble, string id)
 	{
 		referencedMarble = marble;
 		Position = new Vector3(0f, 0f, (marble.GlobalPosition - GlobalPosition).Length());
 		Rotation = new Vector3();
+		RefId = id;
 	}
 
 	/// <summary>Returns a normalized movement vector</summary>
@@ -102,6 +105,18 @@ public partial class SpectatorCam : Camera3D
 		if (Input.IsActionPressed("move_back")) direction.Z = 1;
 		return direction.Normalized();
 	}
+
+	public void UnfollowCam()
+	{
+        referencedMarble = null;
+        var globalPos = GlobalPosition;
+        var globalRot = GlobalRotation;
+        RotationPoint.Rotation = Vector3.Zero;
+        RotationPoint.Position = Vector3.Zero;
+        Rotation = globalRot;
+        Position = globalPos;
+		RefId = string.Empty;
+    }
 
 	public override void _Input(InputEvent @event)
 	{
@@ -128,13 +143,7 @@ public partial class SpectatorCam : Camera3D
 		Move(delta);
 		if (Input.IsActionJustPressed("unfollow_cam"))
 		{
-			referencedMarble = null;
-			var globalPos = GlobalPosition;
-			var globalRot = GlobalRotation;
-			RotationPoint.Rotation = Vector3.Zero;
-			RotationPoint.Position = Vector3.Zero;
-			Rotation = globalRot;
-			Position = globalPos;
+			UnfollowCam();
 		}
 		if (referencedMarble != null)
 		{

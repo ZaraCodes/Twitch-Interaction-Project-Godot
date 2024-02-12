@@ -121,7 +121,9 @@ public partial class TwitchConnection : Node
 		{
 			var file = Godot.FileAccess.OpenEncryptedWithPass(path, Godot.FileAccess.ModeFlags.Read, clientSecret);
 			if (file == null)
+			{
 				GD.Print(Godot.FileAccess.GetOpenError().ToString());
+			}
 
 			token = (Dictionary)Json.ParseString(file.GetAsText());
 
@@ -226,10 +228,12 @@ public partial class TwitchConnection : Node
 		GD.Print("[RefreshToken] Refreshing token...");
 		IsTokenValid((string)token["access_token"]);
 		var result = await ToSignal(this, SignalName.UserTokenChecked);
+
 		if ((string)result[0] == string.Empty)
 		{
 			GD.Print("[RefreshToken] User token invalid");
 			EmitSignal(SignalName.UserTokenInvalid);
+			RefreshAccessToken();
 			return;
 		}
 		else RefreshToken();
@@ -267,7 +271,7 @@ public partial class TwitchConnection : Node
 		}
 		else
 		{
-			GD.Print($"[IsTokenValid] Validation failed with code {(int)data[1]} and reason {(string)data[2]}.");
+			GD.Print($"[IsTokenValid] Validation failed with code {(int)data[1]} and reason {((Dictionary)data[3])["message"]}.");
 			EmitSignal(SignalName.UserTokenChecked, string.Empty);
 		}
 	}
@@ -301,6 +305,20 @@ public partial class TwitchConnection : Node
 			file.Close();
 		}
 		EmitSignal(SignalName.UserTokenRefreshed, response);
+	}
+
+	private async void RefreshAccessToken()
+	{
+		if (token.TryGetValue("refresh_token", out var refresh_token))
+		{
+			RefreshAccessToken(GD.VarToStr(refresh_token));
+		}
+		else
+		{
+			GD.Print("[RefreshAccessToken] No refresh token in dictionary, getting new token...");
+			GetToken();
+			await ToSignal(this, SignalName.UserTokenReceived);
+		}
 	}
 
 	private void SetToken(string token)
@@ -343,7 +361,6 @@ public partial class TwitchConnection : Node
 				}
 				peer.PutUtf8String("success!");
 				int start = response.Find("?");
-				GD.Print(start);
 				GD.Print(response);
 				response = response.Substring(start + 1, response.Find(" ", start) - start);
 				Dictionary data = new();
@@ -352,12 +369,15 @@ public partial class TwitchConnection : Node
 					string[] pair = entry.Split('=');
 					data[pair[0]] = pair.Length > 0 ? pair[1] : string.Empty;
 				}
+				
 				if (data.ContainsKey("error"))
 				{
 					string msg = $"Error {data["error"]}: {data["error_description"]}";
 					GD.Print(msg);
 					SendResponse(peer, "400 BAD REQUEST", msg.ToUtf8Buffer());
+					
 					peer.DisconnectFromHost();
+					
 					EmitSignal(SignalName.UserTokenReceived, string.Empty);
 					return;
 				}
@@ -365,7 +385,9 @@ public partial class TwitchConnection : Node
 				{
 					GD.Print("[GetToken] Success!");
 					SendResponse(peer, "200 OK", "Success!".ToUtf8Buffer());
+					
 					peer.DisconnectFromHost();
+
 					HttpRequest request = new();
 					AddChild(request);
 					string[] headers = new[] { USER_AGENT, "Content-Type: application/x-www-form-urlencoded" };
@@ -501,7 +523,6 @@ public partial class TwitchConnection : Node
 		// channel chat badges
 		GetBadgesFromURL($"https://api.twitch.tv/helix/chat/badges?broadcaster_id={UserId}");
 		await ToSignal(this, SignalName.BadgeCategoryReceived);
-
 	}
 
 	private async void GetBadgesFromURL(string url)
@@ -685,7 +706,7 @@ public partial class TwitchConnection : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		eventsubMessages = new();
+        eventsubMessages = new();
 		UserTokenReceived += SetToken;
 
 		var reconnectionTimer = new Timer

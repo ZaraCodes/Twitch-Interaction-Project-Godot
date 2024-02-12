@@ -9,6 +9,8 @@ public partial class TrackManager : Node3D
 	[Export] public TitleBar TitleBar { get; private set; }
 
 	[Export] public SpectatorCam Camera { get; private set; }
+
+	[Export] private PlayerCard playerCard;
 	#endregion
 
 	#region Methods
@@ -34,6 +36,11 @@ public partial class TrackManager : Node3D
 	public void CreateSpawnMessage(string name, string color)
 	{
 		TitleBar.CreateSpawnMessage(name, color);
+	}
+
+	public void ShowCard(string userId)
+	{
+		playerCard.ShowCard(userId);
 	}
 
 	#endregion

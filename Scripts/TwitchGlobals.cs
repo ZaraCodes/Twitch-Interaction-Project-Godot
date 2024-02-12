@@ -9,6 +9,12 @@ public partial class TwitchGlobals : Node
 	public delegate void BadgeDownloadedEventHandler();
 
 	[Signal]
+	public delegate void ProfilePictureDownloadedEventHandler();
+
+	[Signal]
+	public delegate void PronounsReceivedEventHandler();
+
+	[Signal]
 	public delegate ImageTexture TextureReadyEventHandler();
 
 	private Dictionary playerDatas = new Dictionary();
@@ -221,7 +227,6 @@ public partial class TwitchGlobals : Node
 				user["Pronouns"] = "-";
 			SetUser(user);
 		}
-		GD.Print(playerDatas);
 	}
 
 	public async void AddEventsubSubscriptions()
@@ -236,6 +241,7 @@ public partial class TwitchGlobals : Node
 		twitchConnector.SubscribeToEvent("channel.channel_points_custom_reward_redemption.add",
 										 1, conditions);
 	}
+
 
 
 

@@ -27,7 +27,14 @@ public partial class TitleBar : HBoxContainer
     public void CreateSpawnMessage(string name, string color)
     {
         var newJoinMessage = (JoinMessage)packedJoinMessageScene.Instantiate();
-        newJoinMessage.Init(name, new Color(color));
+        newJoinMessage.Init(name, new Color(color), "joined!");
+        JoinMessageContainer.AddChild(newJoinMessage);
+    }
+
+    public void CreateFallMessage(string name, string color)
+    {
+        var newJoinMessage = (JoinMessage)packedJoinMessageScene.Instantiate();
+        newJoinMessage.Init(name, new Color(color), "fell.");
         JoinMessageContainer.AddChild(newJoinMessage);
     }
     #endregion

@@ -15,6 +15,12 @@ public partial class TitleBar : HBoxContainer
 
     [Export] public BoxContainer JoinMessageContainer { get; private set; }
 
+    [Export] private RichTextLabel prompt;
+
+    [Export] private string JoinPrompt;
+    
+    [Export] private string RacePrompt;
+
     private PackedScene packedJoinMessageScene;
     #endregion
 
@@ -24,17 +30,32 @@ public partial class TitleBar : HBoxContainer
         StartGameButton.Disabled = true;
     }
 
+    public void DisableTestButton()
+    {
+        JoinButton.Disabled = true;
+    }
+
+    public void SetPromptToRace()
+    {
+        prompt.Text = RacePrompt;
+    }
+
+    public void SetPromptToJoin()
+    {
+        prompt.Text = JoinPrompt;
+    }
+
     public void CreateSpawnMessage(string name, string color)
     {
         var newJoinMessage = (JoinMessage)packedJoinMessageScene.Instantiate();
-        newJoinMessage.Init(name, new Color(color), "joined!");
+        newJoinMessage.SetSpawnMsg(name, new Color(color), "joined!");
         JoinMessageContainer.AddChild(newJoinMessage);
     }
 
     public void CreateFallMessage(string name, string color)
     {
         var newJoinMessage = (JoinMessage)packedJoinMessageScene.Instantiate();
-        newJoinMessage.Init(name, new Color(color), "fell.");
+        newJoinMessage.SetDeathMsg(name, new Color(color), "fell.");
         JoinMessageContainer.AddChild(newJoinMessage);
     }
     #endregion
@@ -44,6 +65,7 @@ public partial class TitleBar : HBoxContainer
     public override void _Ready()
 	{
         packedJoinMessageScene = GD.Load<PackedScene>("res://Scenes/join_message.tscn");
+        SetPromptToJoin();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

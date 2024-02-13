@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://dfig82odaxlfw"]
+[gd_scene load_steps=44 format=3 uid="uid://dfig82odaxlfw"]
 
 [ext_resource type="Script" path="res://Scripts/SpectatorCam.cs" id="1_yy68x"]
 [ext_resource type="Script" path="res://Scripts/TitleBar.cs" id="2_jqbuj"]
@@ -6,7 +6,10 @@
 [ext_resource type="Script" path="res://Scripts/TrackManager.cs" id="3_0buyu"]
 [ext_resource type="Script" path="res://Scripts/UI/PlayerCard.cs" id="3_hb163"]
 [ext_resource type="ArrayMesh" uid="uid://40tvj3cvkn1x" path="res://Models/Marble Kit/straight_wide.obj" id="3_isahg"]
+[ext_resource type="Script" path="res://Scripts/UI/Countdown.cs" id="4_3cxrq"]
+[ext_resource type="Script" path="res://Scripts/UI/RaceTime.cs" id="4_jeu1v"]
 [ext_resource type="ArrayMesh" uid="uid://d0nlwm27pm503" path="res://Models/Marble Kit/funnel_long.obj" id="4_osb88"]
+[ext_resource type="Script" path="res://Scripts/UI/WinningPage.cs" id="6_gdyto"]
 [ext_resource type="PhysicsMaterial" uid="uid://c3mfekmpjmyt0" path="res://Scenes/MarbleTrack PhysicsMaterial.tres" id="6_j4ywx"]
 [ext_resource type="PhysicsMaterial" uid="uid://euqhrvlukucy" path="res://Scenes/0 Friction PhysicsMaterial.tres" id="8_387ss"]
 [ext_resource type="ArrayMesh" uid="uid://878pk1hr0ib2" path="res://Models/Marble Kit/helix_large_left.obj" id="11_klm1f"]
@@ -15,6 +18,7 @@
 [ext_resource type="ArrayMesh" uid="uid://c6nxd3wiu57v1" path="res://Models/Marble Kit/banner.obj" id="14_d5a65"]
 [ext_resource type="ArrayMesh" uid="uid://bo6ty7gb2ivvk" path="res://Models/Marble Kit/straight.obj" id="14_mryii"]
 [ext_resource type="ArrayMesh" uid="uid://cw2ix33n4t8x5" path="res://Models/Marble Kit/end_square.obj" id="15_ops11"]
+[ext_resource type="Script" path="res://Scripts/FinishTrigger.cs" id="18_1jcjp"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_uhc48"]
 dof_blur_far_enabled = true
@@ -31,6 +35,17 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="LabelSettings" id="LabelSettings_r12di"]
+font_size = 160
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mrbif"]
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_1tgv5"]
 data = PackedVector3Array(-0.85, 0.5, -0.5, -0.575, 0.3125, -0.5, -0.7, 0.5, -0.5, -0.85, 0, -0.5, -0.575, 0.3125, -0.5, -0.85, 0.5, -0.5, -0.575, 0.3125, -0.5, -0.85, 0, -0.5, 0.85, 0, -0.5, -0.575, 0.3125, -0.5, 0.85, 0, -0.5, -0.2, 0.25, -0.5, 0.85, 0, -0.5, 0.2, 0.25, -0.5, -0.2, 0.25, -0.5, 0.85, 0, -0.5, 0.575, 0.3125, -0.5, 0.2, 0.25, -0.5, 0.575, 0.3125, -0.5, 0.85, 0, -0.5, 0.85, 0.5, -0.5, 0.575, 0.3125, -0.5, 0.85, 0.5, -0.5, 0.7, 0.5, -0.5, -0.85, 0.5, -0.5, -0.7, 0.5, -0.5, -0.575, 0.3125, -0.5, -0.85, 0, -0.5, -0.85, 0.5, -0.5, -0.575, 0.3125, -0.5, -0.575, 0.3125, -0.5, 0.85, 0, -0.5, -0.85, 0, -0.5, -0.575, 0.3125, -0.5, -0.2, 0.25, -0.5, 0.85, 0, -0.5, 0.85, 0, -0.5, -0.2, 0.25, -0.5, 0.2, 0.25, -0.5, 0.85, 0, -0.5, 0.2, 0.25, -0.5, 0.575, 0.3125, -0.5, 0.575, 0.3125, -0.5, 0.85, 0.5, -0.5, 0.85, 0, -0.5, 0.575, 0.3125, -0.5, 0.7, 0.5, -0.5, 0.85, 0.5, -0.5, 0.85, 0.5, 0.5, 0.575, 0.3125, 0.5, 0.7, 0.5, 0.5, 0.85, 0, 0.5, 0.575, 0.3125, 0.5, 0.85, 0.5, 0.5, 0.575, 0.3125, 0.5, 0.85, 0, 0.5, -0.85, 0, 0.5, 0.575, 0.3125, 0.5, -0.85, 0, 0.5, 0.2, 0.25, 0.5, -0.85, 0, 0.5, -0.2, 0.25, 0.5, 0.2, 0.25, 0.5, -0.85, 0, 0.5, -0.575, 0.3125, 0.5, -0.2, 0.25, 0.5, -0.575, 0.3125, 0.5, -0.85, 0, 0.5, -0.85, 0.5, 0.5, -0.575, 0.3125, 0.5, -0.85, 0.5, 0.5, -0.7, 0.5, 0.5, 0.85, 0.5, 0.5, 0.7, 0.5, 0.5, 0.575, 0.3125, 0.5, 0.85, 0, 0.5, 0.85, 0.5, 0.5, 0.575, 0.3125, 0.5, 0.575, 0.3125, 0.5, -0.85, 0, 0.5, 0.85, 0, 0.5, 0.575, 0.3125, 0.5, 0.2, 0.25, 0.5, -0.85, 0, 0.5, -0.85, 0, 0.5, 0.2, 0.25, 0.5, -0.2, 0.25, 0.5, -0.85, 0, 0.5, -0.2, 0.25, 0.5, -0.575, 0.3125, 0.5, -0.575, 0.3125, 0.5, -0.85, 0.5, 0.5, -0.85, 0, 0.5, -0.575, 0.3125, 0.5, -0.7, 0.5, 0.5, -0.85, 0.5, 0.5, 0.85, 0, -0.5, -0.85, 0, 0.5, 0.85, 0, 0.5, -0.85, 0, 0.5, 0.85, 0, -0.5, -0.85, 0, -0.5, 0.85, 0, -0.5, 0.85, 0, 0.5, -0.85, 0, 0.5, -0.85, 0, 0.5, -0.85, 0, -0.5, 0.85, 0, -0.5, 0.85, 0, -0.5, 0.85, 0.5, 0.5, 0.85, 0.5, -0.5, 0.85, 0.5, 0.5, 0.85, 0, -0.5, 0.85, 0, 0.5, 0.85, 0, -0.5, 0.85, 0.5, -0.5, 0.85, 0.5, 0.5, 0.85, 0.5, 0.5, 0.85, 0, 0.5, 0.85, 0, -0.5, 0.85, 0.5, 0.5, 0.7, 0.5, -0.5, 0.85, 0.5, -0.5, 0.7, 0.5, -0.5, 0.85, 0.5, 0.5, 0.7, 0.5, 0.5, 0.85, 0.5, 0.5, 0.85, 0.5, -0.5, 0.7, 0.5, -0.5, 0.7, 0.5, -0.5, 0.7, 0.5, 0.5, 0.85, 0.5, 0.5, -0.7, 0.5, 0.5, -0.85, 0.5, -0.5, -0.7, 0.5, -0.5, -0.85, 0.5, -0.5, -0.7, 0.5, 0.5, -0.85, 0.5, 0.5, -0.7, 0.5, 0.5, -0.7, 0.5, -0.5, -0.85, 0.5, -0.5, -0.85, 0.5, -0.5, -0.85, 0.5, 0.5, -0.7, 0.5, 0.5, -0.85, 0.5, -0.5, -0.85, 0, 0.5, -0.85, 0, -0.5, -0.85, 0, 0.5, -0.85, 0.5, -0.5, -0.85, 0.5, 0.5, -0.85, 0.5, -0.5, -0.85, 0, -0.5, -0.85, 0, 0.5, -0.85, 0, 0.5, -0.85, 0.5, 0.5, -0.85, 0.5, -0.5, 0.7, 0.5, -0.5, 0.575, 0.3125, 0.5, 0.575, 0.3125, -0.5, 0.575, 0.3125, 0.5, 0.7, 0.5, -0.5, 0.7, 0.5, 0.5, 0.7, 0.5, -0.5, 0.575, 0.3125, -0.5, 0.575, 0.3125, 0.5, 0.575, 0.3125, 0.5, 0.7, 0.5, 0.5, 0.7, 0.5, -0.5, 0.575, 0.3125, 0.5, 0.2, 0.25, -0.5, 0.575, 0.3125, -0.5, 0.2, 0.25, -0.5, 0.575, 0.3125, 0.5, 0.2, 0.25, 0.5, 0.575, 0.3125, 0.5, 0.575, 0.3125, -0.5, 0.2, 0.25, -0.5, 0.2, 0.25, -0.5, 0.2, 0.25, 0.5, 0.575, 0.3125, 0.5, 0.2, 0.25, 0.5, -0.2, 0.25, -0.5, 0.2, 0.25, -0.5, -0.2, 0.25, -0.5, 0.2, 0.25, 0.5, -0.2, 0.25, 0.5, 0.2, 0.25, 0.5, 0.2, 0.25, -0.5, -0.2, 0.25, -0.5, -0.2, 0.25, -0.5, -0.2, 0.25, 0.5, 0.2, 0.25, 0.5, -0.2, 0.25, 0.5, -0.575, 0.3125, -0.5, -0.2, 0.25, -0.5, -0.575, 0.3125, -0.5, -0.2, 0.25, 0.5, -0.575, 0.3125, 0.5, -0.2, 0.25, 0.5, -0.2, 0.25, -0.5, -0.575, 0.3125, -0.5, -0.575, 0.3125, -0.5, -0.575, 0.3125, 0.5, -0.2, 0.25, 0.5, -0.575, 0.3125, -0.5, -0.7, 0.5, 0.5, -0.7, 0.5, -0.5, -0.7, 0.5, 0.5, -0.575, 0.3125, -0.5, -0.575, 0.3125, 0.5, -0.575, 0.3125, -0.5, -0.7, 0.5, -0.5, -0.7, 0.5, 0.5, -0.7, 0.5, 0.5, -0.575, 0.3125, 0.5, -0.575, 0.3125, -0.5)
@@ -81,6 +96,9 @@ data = PackedVector3Array(-0.35, 0.5, 0.5, -0.5, 0.5, -0.5, -0.35, 0.5, -0.5, -0
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_mey1m"]
 data = PackedVector3Array(0.2875, 0.3125, 0.2875, 0.1, 0.25, -0.5, 0.2875, 0.3125, -0.5, 0.1, 0.25, -0.5, 0.2875, 0.3125, 0.2875, 0.1, 0.25, 0.1, 0.2875, 0.3125, 0.2875, 0.2875, 0.3125, -0.5, 0.1, 0.25, -0.5, 0.1, 0.25, -0.5, 0.1, 0.25, 0.1, 0.2875, 0.3125, 0.2875, 0.35, 0.5, -0.5, 0.2875, 0.3125, 0.2875, 0.2875, 0.3125, -0.5, 0.2875, 0.3125, 0.2875, 0.35, 0.5, -0.5, 0.35, 0.5, 0.35, 0.35, 0.5, -0.5, 0.2875, 0.3125, -0.5, 0.2875, 0.3125, 0.2875, 0.2875, 0.3125, 0.2875, 0.35, 0.5, 0.35, 0.35, 0.5, -0.5, -0.1, 0.25, 0.1, -0.2875, 0.3125, -0.5, -0.1, 0.25, -0.5, -0.2875, 0.3125, -0.5, -0.1, 0.25, 0.1, -0.2875, 0.3125, 0.2875, -0.1, 0.25, 0.1, -0.1, 0.25, -0.5, -0.2875, 0.3125, -0.5, -0.2875, 0.3125, -0.5, -0.2875, 0.3125, 0.2875, -0.1, 0.25, 0.1, -0.2875, 0.3125, -0.5, -0.35, 0.5, 0.35, -0.35, 0.5, -0.5, -0.35, 0.5, 0.35, -0.2875, 0.3125, -0.5, -0.2875, 0.3125, 0.2875, -0.2875, 0.3125, -0.5, -0.35, 0.5, -0.5, -0.35, 0.5, 0.35, -0.35, 0.5, 0.35, -0.2875, 0.3125, 0.2875, -0.2875, 0.3125, -0.5, -0.2875, 0.3125, 0.2875, 0.1, 0.25, 0.1, 0.2875, 0.3125, 0.2875, 0.1, 0.25, 0.1, -0.2875, 0.3125, 0.2875, -0.1, 0.25, 0.1, -0.2875, 0.3125, 0.2875, 0.2875, 0.3125, 0.2875, 0.1, 0.25, 0.1, 0.1, 0.25, 0.1, -0.1, 0.25, 0.1, -0.2875, 0.3125, 0.2875, 0.35, 0.5, 0.35, -0.2875, 0.3125, 0.2875, 0.2875, 0.3125, 0.2875, -0.2875, 0.3125, 0.2875, 0.35, 0.5, 0.35, -0.35, 0.5, 0.35, 0.35, 0.5, 0.35, 0.2875, 0.3125, 0.2875, -0.2875, 0.3125, 0.2875, -0.2875, 0.3125, 0.2875, -0.35, 0.5, 0.35, 0.35, 0.5, 0.35, 0.1, 0.25, 0.1, -0.1, 0.25, -0.5, 0.1, 0.25, -0.5, -0.1, 0.25, -0.5, 0.1, 0.25, 0.1, -0.1, 0.25, 0.1, 0.1, 0.25, 0.1, 0.1, 0.25, -0.5, -0.1, 0.25, -0.5, -0.1, 0.25, -0.5, -0.1, 0.25, 0.1, 0.1, 0.25, 0.1, -0.5, 0.5, -0.5, -0.5, 0, 0.5, -0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0, -0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.2875, 0.3125, -0.5, -0.35, 0.5, -0.5, -0.5, 0, -0.5, -0.2875, 0.3125, -0.5, -0.5, 0.5, -0.5, -0.2875, 0.3125, -0.5, -0.5, 0, -0.5, 0.5, 0, -0.5, -0.2875, 0.3125, -0.5, 0.5, 0, -0.5, -0.1, 0.25, -0.5, 0.5, 0, -0.5, 0.1, 0.25, -0.5, -0.1, 0.25, -0.5, 0.5, 0, -0.5, 0.2875, 0.3125, -0.5, 0.1, 0.25, -0.5, 0.2875, 0.3125, -0.5, 0.5, 0, -0.5, 0.5, 0.5, -0.5, 0.2875, 0.3125, -0.5, 0.5, 0.5, -0.5, 0.35, 0.5, -0.5, -0.5, 0.5, -0.5, -0.35, 0.5, -0.5, -0.2875, 0.3125, -0.5, -0.5, 0, -0.5, -0.5, 0.5, -0.5, -0.2875, 0.3125, -0.5, -0.2875, 0.3125, -0.5, 0.5, 0, -0.5, -0.5, 0, -0.5, -0.2875, 0.3125, -0.5, -0.1, 0.25, -0.5, 0.5, 0, -0.5, 0.5, 0, -0.5, -0.1, 0.25, -0.5, 0.1, 0.25, -0.5, 0.5, 0, -0.5, 0.1, 0.25, -0.5, 0.2875, 0.3125, -0.5, 0.2875, 0.3125, -0.5, 0.5, 0.5, -0.5, 0.5, 0, -0.5, 0.2875, 0.3125, -0.5, 0.35, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0, -0.5, 0.5, 0, 0.5, 0.5, 0, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, 0.5, 0.5, 0.5, 0.5, 0, 0.5, 0.5, 0.5, 0.5, -0.5, 0, 0.5, -0.5, 0.5, 0.5, -0.5, 0, 0.5, 0.5, 0, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, 0.5, 0.5, 0, 0.5, -0.5, 0, 0.5, 0.5, 0, -0.5, -0.5, 0, -0.5, 0.5, 0, -0.5, 0.5, 0, 0.5, -0.5, 0, 0.5, -0.5, 0, 0.5, -0.5, 0, -0.5, 0.5, 0, -0.5, -0.35, 0.5, 0.35, -0.5, 0.5, -0.5, -0.35, 0.5, -0.5, -0.35, 0.5, 0.35, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.35, 0.5, 0.35, -0.5, 0.5, 0.5, -0.35, 0.5, 0.35, 0.35, 0.5, 0.35, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.35, 0.5, -0.5, 0.5, 0.5, 0.5, 0.35, 0.5, 0.35, 0.5, 0.5, 0.5, 0.35, 0.5, -0.5, 0.5, 0.5, -0.5, -0.35, 0.5, 0.35, -0.35, 0.5, -0.5, -0.5, 0.5, -0.5, -0.35, 0.5, 0.35, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.35, 0.5, 0.35, -0.35, 0.5, 0.35, -0.5, 0.5, 0.5, 0.35, 0.5, 0.35, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.35, 0.5, -0.5, 0.35, 0.5, 0.35, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.35, 0.5, -0.5)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_x4g68"]
+size = Vector3(3.45833, 0.993408, 0.8)
+
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_q5stx"]
 sky_top_color = Color(0.384314, 0.454902, 0.717647, 1)
 sky_horizon_color = Color(0.647059, 0.654902, 0.670588, 1)
@@ -127,7 +145,7 @@ offset_bottom = 50.0
 grow_horizontal = 2
 color = Color(0.290196, 0.290196, 0.290196, 1)
 
-[node name="Title Bar" type="HBoxContainer" parent="UI" node_paths=PackedStringArray("MapName", "PlayerNumbers", "StartGameButton", "JoinButton", "JoinMessageContainer")]
+[node name="Title Bar" type="HBoxContainer" parent="UI" node_paths=PackedStringArray("MapName", "PlayerNumbers", "StartGameButton", "JoinButton", "JoinMessageContainer", "prompt")]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 1
 anchors_preset = 10
@@ -142,6 +160,9 @@ PlayerNumbers = NodePath("Connected Players Section/Numbers")
 StartGameButton = NodePath("HBoxContainer/Start Game Button")
 JoinButton = NodePath("HBoxContainer/Join Button")
 JoinMessageContainer = NodePath("../Join Message Container")
+prompt = NodePath("VBoxContainer/Prompt")
+JoinPrompt = "[center][wave amp=50.0 freq=5.0 connected=1]Type [b]!play[/b] to join the game![/wave]"
+RacePrompt = "[center][wave amp=50.0 freq=5.0 connected=1]Have fun![/wave]"
 
 [node name="Map Title Section" type="HBoxContainer" parent="UI/Title Bar"]
 layout_mode = 2
@@ -187,7 +208,7 @@ shortcut_keys_enabled = false
 clip_contents = false
 layout_mode = 2
 size_flags_vertical = 4
-text = "bla/bla"
+text = "0/0"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
@@ -198,7 +219,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/Title Bar/VBoxContainer"]
+[node name="Prompt" type="RichTextLabel" parent="UI/Title Bar/VBoxContainer"]
 clip_contents = false
 layout_mode = 2
 bbcode_enabled = true
@@ -244,7 +265,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_bt4vn")
 script = ExtResource("3_hb163")
 PlayerName = NodePath("Name")
 PlayerPronouns = NodePath("Pronouns")
-badges = [NodePath("HBoxContainer/Badge 0"), NodePath("HBoxContainer/Badge 1"), NodePath("HBoxContainer/Badge 2")]
+badges = []
 
 [node name="Name" type="RichTextLabel" parent="UI/Player Info"]
 layout_mode = 0
@@ -296,11 +317,100 @@ offset_top = 76.0
 offset_right = 138.0
 offset_bottom = 116.0
 
-[node name="Track Manager" type="Node3D" parent="." node_paths=PackedStringArray("TitleBar", "Camera", "playerCard")]
+[node name="Race Time" type="RichTextLabel" parent="UI"]
+layout_mode = 2
+offset_left = 3.0
+offset_top = 48.0
+offset_right = 190.0
+offset_bottom = 98.0
+bbcode_enabled = true
+text = "[b][font_size=30]00:00.000"
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+script = ExtResource("4_jeu1v")
+bbcode = "[b][font_size=30]"
+
+[node name="Countdown" type="Label" parent="UI" node_paths=PackedStringArray("timer")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "10"
+label_settings = SubResource("LabelSettings_r12di")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_3cxrq")
+timer = NodePath("Timer")
+startNumber = 1
+
+[node name="Timer" type="Timer" parent="UI/Countdown"]
+
+[node name="Winning Page" type="Panel" parent="UI" node_paths=PackedStringArray("leaderboard", "winnerNameLabel", "winningTimeLabel")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(200, 200)
+theme_override_styles/panel = SubResource("StyleBoxFlat_mrbif")
+script = ExtResource("6_gdyto")
+leaderboard = NodePath("Leaderboard")
+winnerNameLabel = NodePath("Playername Wins")
+winningTimeLabel = NodePath("Winner Time")
+
+[node name="Playername Wins" type="RichTextLabel" parent="UI/Winning Page"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 360.0
+offset_bottom = 120.0
+bbcode_enabled = true
+text = "[center][font_size=30][b][color=COLOR]PLAYERNAME[/color][/b]
+wins!"
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="Winner Time" type="RichTextLabel" parent="UI/Winning Page"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 360.0
+offset_bottom = 140.0
+bbcode_enabled = true
+text = "[center][font_size=20][i]TIME"
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="Leaderboard" type="VBoxContainer" parent="UI/Winning Page"]
+layout_mode = 0
+offset_top = 140.0
+offset_right = 400.0
+offset_bottom = 163.0
+
+[node name="Track Manager" type="Node3D" parent="." node_paths=PackedStringArray("TitleBar", "Camera", "RaceTime", "WinningPage")]
 script = ExtResource("3_0buyu")
 TitleBar = NodePath("../UI/Title Bar")
 Camera = NodePath("../Cam Rotation Point/Camera3D")
-playerCard = NodePath("../UI/Player Info")
+RaceTime = NodePath("../UI/Race Time")
+WinningPage = NodePath("../UI/Winning Page")
 
 [node name="MarbleTrack" type="Node3D" parent="Track Manager" node_paths=PackedStringArray("spawnPointParent", "marblesParent")]
 script = ExtResource("2_qytxm")
@@ -838,8 +948,23 @@ skeleton = NodePath("../../../../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Track Manager/MarbleTrack/Parts/Node3D/EndSquare/StaticBody3D"]
 shape = SubResource("ConcavePolygonShape3D_mey1m")
 
+[node name="Finish" type="Node3D" parent="Track Manager/MarbleTrack"]
+
+[node name="Finish Trigger" type="Area3D" parent="Track Manager/MarbleTrack/Finish"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, -2, -9)
+script = ExtResource("18_1jcjp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Track Manager/MarbleTrack/Finish/Finish Trigger"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61784, 0.0032959, 0.503105)
+shape = SubResource("BoxShape3D_x4g68")
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_3850u")
 
-[connection signal="pressed" from="UI/Title Bar/HBoxContainer/Start Game Button" to="Track Manager" method="StartGame"]
+[connection signal="pressed" from="UI/Title Bar/HBoxContainer/Start Game Button" to="UI/Title Bar" method="DisableStartButton"]
+[connection signal="pressed" from="UI/Title Bar/HBoxContainer/Start Game Button" to="UI/Countdown" method="StartCountdown"]
+[connection signal="pressed" from="UI/Title Bar/HBoxContainer/Join Button" to="UI/Title Bar" method="DisableTestButton"]
 [connection signal="pressed" from="UI/Title Bar/HBoxContainer/Join Button" to="Track Manager" method="TestTrack"]
+[connection signal="OnCountdownFinished" from="UI/Countdown" to="UI/Race Time" method="Start"]
+[connection signal="OnCountdownFinished" from="UI/Countdown" to="Track Manager" method="StartGame"]
+[connection signal="OnMarbleFinished" from="Track Manager/MarbleTrack/Finish/Finish Trigger" to="Track Manager/MarbleTrack" method="FinishPlayer"]

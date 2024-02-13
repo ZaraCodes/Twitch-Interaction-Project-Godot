@@ -179,14 +179,14 @@ public partial class TwitchConnection : Node
 				if (token.TryGetValue("refresh_token", out var refresh_token))
 				{
 					GD.Print($"[Authenticate] Refresh token: {refresh_token}");
-					if (GD.VarToStr(refresh_token) == string.Empty)
+					if ((string)refresh_token == string.Empty)
 					{
 						GetToken();
 						await ToSignal(this, SignalName.UserTokenReceived);
 					}
 					else
 					{
-						RefreshAccessToken(GD.VarToStr(refresh_token));
+						RefreshAccessToken((string) refresh_token);
 						await ToSignal(this, SignalName.UserTokenRefreshed);
 					}
 
@@ -271,7 +271,11 @@ public partial class TwitchConnection : Node
 		}
 		else
 		{
-			GD.Print($"[IsTokenValid] Validation failed with code {(int)data[1]} and reason {((Dictionary)data[3])["message"]}.");
+			var dataDict = (Dictionary)Json.ParseString(data[3].AsByteArray().GetStringFromUtf8());
+            if (dataDict.ContainsKey("message"))
+				GD.Print($"[IsTokenValid] Validation failed with code {(int)data[1]} and reason {dataDict["message"]}.");
+			else
+				GD.Print($"[IsTokenValid] Validation failed: {data[3]}.");
 			EmitSignal(SignalName.UserTokenChecked, string.Empty);
 		}
 	}
@@ -290,13 +294,19 @@ public partial class TwitchConnection : Node
 		request.QueueFree();
 		var response = (Dictionary)Json.ParseString(reply[3].AsByteArray().GetStringFromUtf8());
 		GD.Print($"[RefreshAccessToken] Response: {response}");
-		if ((int) response["status"] == 400)
+		if ((int)reply[1] == 400)
 		{
 			GD.Print("[RefreshAccessToken] Refreshing token failed, requesting new token");
 			GetToken();
 			await ToSignal(this, SignalName.UserTokenReceived);
 		}
-		else
+		else if ((int)reply[1] == 401)
+		{
+            GD.Print("[RefreshAccessToken] Refreshing token failed because it has already been used, requesting new token");
+            GetToken();
+            await ToSignal(this, SignalName.UserTokenReceived);
+        }
+        else
 		{
 			GD.Print("[RefreshAccessToken] Success");
 			token = response;
@@ -311,7 +321,7 @@ public partial class TwitchConnection : Node
 	{
 		if (token.TryGetValue("refresh_token", out var refresh_token))
 		{
-			RefreshAccessToken(GD.VarToStr(refresh_token));
+			RefreshAccessToken((string) refresh_token);
 		}
 		else
 		{
@@ -706,7 +716,7 @@ public partial class TwitchConnection : Node
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-        eventsubMessages = new();
+		eventsubMessages = new();
 		UserTokenReceived += SetToken;
 
 		var reconnectionTimer = new Timer

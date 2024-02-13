@@ -12,13 +12,18 @@ public partial class PlayerMarble : Node3D
 	[Export] private Vector2 offset;
 	private string playerName;
 	private string color;
+
+	[Signal]
+	public delegate void OnMarbleDestructionEventHandler(string id);
 	#endregion
 
 	#region Methods
 	public async void InitMarble(string id, string badges, MarbleTrack marbleTrack)
 	{
 		this.marbleTrack = marbleTrack;
-		ID = id;
+        OnMarbleDestruction += marbleTrack.RemoveOnePlayer;
+
+        ID = id;
 		Name = id;
 		label.Text = string.Empty;
 		var twitchGlobals = marbleTrack.TwitchGlobals;
@@ -73,8 +78,8 @@ public partial class PlayerMarble : Node3D
 			{
 				var cam = marbleTrack.TrackManager.Camera;
 				cam.SetReferenceMarble(rigidBody, ID);
-                // marbleTrack.TrackManager.ShowCard(ID);
-            }
+				// marbleTrack.TrackManager.ShowCard(ID);
+			}
 		}
 	}
 
@@ -90,7 +95,8 @@ public partial class PlayerMarble : Node3D
 			marbleTrack.TrackManager.TitleBar.CreateFallMessage(playerName, color);
 			if (marbleTrack.TrackManager.Camera.RefId == ID) marbleTrack.TrackManager.Camera.UnfollowCam();
 
-            Free();
+			EmitSignal(SignalName.OnMarbleDestruction, ID);
+			Free();
 		}
 	}
 
@@ -109,7 +115,6 @@ public partial class PlayerMarble : Node3D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

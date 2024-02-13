@@ -23,7 +23,7 @@ public partial class MarbleTrack : Node3D
 
 	private int maxPlayerCount;
 
-	private int playerCount;
+	public int CurrentPlayerCount { get; private set; }
 
 	private PackedScene packedMarbleScene;
 
@@ -31,7 +31,11 @@ public partial class MarbleTrack : Node3D
 
 	private RandomNumberGenerator rng;
 
-	public int CurrentPlayerCount;
+	public int FinishedPlayers { get; private set; }
+
+	public int DeadPlayers { get; private set; }
+
+	public int MaxJoinedPlayers { get; private set; }
 	#endregion
 
 	#region Methods
@@ -47,7 +51,7 @@ public partial class MarbleTrack : Node3D
 
 	private void InitTitleBar()
 	{
-		TrackManager.TitleBar.PlayerNumbers.Text = $"{playerCount}/{maxPlayerCount}";
+		TrackManager.TitleBar.PlayerNumbers.Text = $"{CurrentPlayerCount}/{maxPlayerCount}";
 		TrackManager.TitleBar.MapName.Text = MapName;
 		TrackManager.InitLevel(this);
 	}
@@ -75,7 +79,7 @@ public partial class MarbleTrack : Node3D
 		int index = GD.RandRange(0, spawnPoints.Count - 1);
 		Vector3 spawnPoint = spawnPoints[index];
 		spawnPoints.Remove(spawnPoint);
-		TrackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
+		TrackManager.TitleBar.PlayerNumbers.Text = $"{++CurrentPlayerCount}/{maxPlayerCount}";
 
 		newMarble.Position = spawnPoint;
 		newMarble.InitMarble((string)message["UserId"], (string)message["Badges"], this);
@@ -92,14 +96,16 @@ public partial class MarbleTrack : Node3D
 		int index = rng.RandiRange(0, spawnPoints.Count - 1);
 		Vector3 spawnPoint = spawnPoints[index];
 		spawnPoints.Remove(spawnPoint);
-		TrackManager.TitleBar.PlayerNumbers.Text = $"{++playerCount}/{maxPlayerCount}";
+		TrackManager.TitleBar.PlayerNumbers.Text = $"{++CurrentPlayerCount}/{maxPlayerCount}";
 		newMarble.Position = spawnPoint;
 		newMarble.InitMarble(id, "", this);
 	}
 
 	public void TestTrack()
 	{
-		for (int i = 0; i < maxPlayerCount; i++)
+		if (!allowMarblesSpawning) return;
+		var maxMarbles = spawnPoints.Count;
+		for (int i = 0; i < maxMarbles; i++)
 		{
 			var color = new Color(rng.Randf(), rng.Randf(), rng.Randf());
 			var name = $"Test Marble {i}";
@@ -109,13 +115,62 @@ public partial class MarbleTrack : Node3D
 
 	public void StartGame()
 	{
-		allowMarblesSpawning = false;
+		DeadPlayers = 0;
+		MaxJoinedPlayers = CurrentPlayerCount;
 
-		foreach (PlayerMarble marble in marblesParent.GetChildren())
+		allowMarblesSpawning = false;
+		TrackManager.TitleBar.SetPromptToRace();
+		foreach (PlayerMarble marble in marblesParent.GetChildren().Cast<PlayerMarble>())
 		{
 			marble.SetFreeze(false);
 		}
 	}
+
+	public void RemoveOnePlayer(string id)
+	{
+		GD.Print("blah");
+        //TrackManager.FinishedPlayers
+        var player = new Dictionary
+        {
+            { "id", id },
+            { "time", -1d }
+        };
+		if (!TrackManager.FinishedPlayers.ContainsKey(MaxJoinedPlayers - DeadPlayers))
+			TrackManager.FinishedPlayers.Add(MaxJoinedPlayers - DeadPlayers, player);
+		else GD.Print($"YEK {MaxJoinedPlayers - DeadPlayers}");
+		DeadPlayers++;
+		CurrentPlayerCount--;
+
+        if (CurrentPlayerCount == 0)
+        {
+            GD.Print(TrackManager.FinishedPlayers);
+            TrackManager.RaceTime.Stop();
+			TrackManager.ShowWinningPage();
+        }
+    }
+
+    public void FinishPlayer(string id)
+	{
+		FinishedPlayers++;
+		var time = TrackManager.RaceTime.Time;
+        var player = new Dictionary
+        {
+            { "id", id },
+            { "time", time }
+        };
+
+        if (!TrackManager.FinishedPlayers.ContainsKey(FinishedPlayers))
+            TrackManager.FinishedPlayers.Add(FinishedPlayers, player);
+        else GD.Print($"YEK {FinishedPlayers}");
+        CurrentPlayerCount--;
+
+		if (CurrentPlayerCount == 0)
+		{
+			GD.Print(TrackManager.FinishedPlayers);
+			TrackManager.RaceTime.Stop();
+            TrackManager.ShowWinningPage();
+        }
+    }
 	#endregion
 
 	// Called when the node enters the scene tree for the first time.

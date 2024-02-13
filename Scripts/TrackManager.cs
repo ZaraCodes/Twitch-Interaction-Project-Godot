@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 using System;
 
 public partial class TrackManager : Node3D
@@ -11,6 +12,12 @@ public partial class TrackManager : Node3D
 	[Export] public SpectatorCam Camera { get; private set; }
 
 	[Export] private PlayerCard playerCard;
+
+	[Export] public RaceTime RaceTime { get; private set; }
+
+	[Export] public WinningPage WinningPage { get; private set; }
+
+	public Dictionary FinishedPlayers { get; private set; }
 	#endregion
 
 	#region Methods
@@ -29,7 +36,6 @@ public partial class TrackManager : Node3D
 	/// </summary>
 	public void StartGame()
 	{
-		TitleBar.DisableStartButton();
 		MarbleTrack.StartGame();
 	}
 
@@ -43,10 +49,18 @@ public partial class TrackManager : Node3D
 		playerCard.ShowCard(userId);
 	}
 
+	public void ShowWinningPage()
+	{
+		WinningPage.FillLeaderboard(FinishedPlayers, MarbleTrack.TwitchGlobals);
+		WinningPage.Visible = true;
+	}
+
+
 	#endregion
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		FinishedPlayers = new Dictionary();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

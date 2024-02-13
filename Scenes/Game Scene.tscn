@@ -127,6 +127,7 @@ RotationPoint = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.294341, 0.955701, 0, -0.955701, 0.294341, 2.04499, 3.01934, -0.601065)
+shadow_enabled = true
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -404,6 +405,31 @@ layout_mode = 0
 offset_top = 140.0
 offset_right = 400.0
 offset_bottom = 163.0
+
+[node name="Restart Button" type="Button" parent="UI/Winning Page"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = 8.0
+offset_right = 180.0
+offset_bottom = 39.0
+grow_vertical = 0
+text = "Restart"
+
+[node name="Quit Button" type="Button" parent="UI/Winning Page"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = 8.0
+offset_bottom = 39.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Quit"
 
 [node name="Track Manager" type="Node3D" parent="." node_paths=PackedStringArray("TitleBar", "Camera", "RaceTime", "WinningPage")]
 script = ExtResource("3_0buyu")
@@ -958,6 +984,18 @@ script = ExtResource("18_1jcjp")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.61784, 0.0032959, 0.503105)
 shape = SubResource("BoxShape3D_x4g68")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="Track Manager/MarbleTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.93765, -1.50583, -8.50073)
+light_color = Color(1, 0.32549, 0.258824, 1)
+shadow_enabled = true
+omni_range = 2.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="Track Manager/MarbleTrack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.90904, -1.50583, -8.50073)
+light_color = Color(1, 0.32549, 0.258824, 1)
+shadow_enabled = true
+omni_range = 2.0
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_3850u")
 
@@ -967,4 +1005,6 @@ environment = SubResource("Environment_3850u")
 [connection signal="pressed" from="UI/Title Bar/HBoxContainer/Join Button" to="Track Manager" method="TestTrack"]
 [connection signal="OnCountdownFinished" from="UI/Countdown" to="UI/Race Time" method="Start"]
 [connection signal="OnCountdownFinished" from="UI/Countdown" to="Track Manager" method="StartGame"]
+[connection signal="pressed" from="UI/Winning Page/Restart Button" to="Track Manager" method="Reset"]
+[connection signal="OnReset" from="Track Manager/MarbleTrack" to="Track Manager/MarbleTrack/Finish/Finish Trigger" method="Reset"]
 [connection signal="OnMarbleFinished" from="Track Manager/MarbleTrack/Finish/Finish Trigger" to="Track Manager/MarbleTrack" method="FinishPlayer"]

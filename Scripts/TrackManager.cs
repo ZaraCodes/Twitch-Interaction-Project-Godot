@@ -4,7 +4,7 @@ using System;
 
 public partial class TrackManager : Node3D
 {
-	#region
+	#region Fields
 	public MarbleTrack MarbleTrack { get; private set; }
 
 	[Export] public TitleBar TitleBar { get; private set; }
@@ -55,6 +55,10 @@ public partial class TrackManager : Node3D
 		WinningPage.Visible = true;
 	}
 
+	public void Reset()
+	{
+		MarbleTrack.Reset();
+	}
 
 	#endregion
 	// Called when the node enters the scene tree for the first time.

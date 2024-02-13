@@ -36,6 +36,9 @@ public partial class MarbleTrack : Node3D
 	public int DeadPlayers { get; private set; }
 
 	public int MaxJoinedPlayers { get; private set; }
+
+	[Signal]
+	public delegate void OnResetEventHandler();
 	#endregion
 
 	#region Methods
@@ -128,8 +131,6 @@ public partial class MarbleTrack : Node3D
 
 	public void RemoveOnePlayer(string id)
 	{
-		GD.Print("blah");
-        //TrackManager.FinishedPlayers
         var player = new Dictionary
         {
             { "id", id },
@@ -139,13 +140,19 @@ public partial class MarbleTrack : Node3D
 			TrackManager.FinishedPlayers.Add(MaxJoinedPlayers - DeadPlayers, player);
 		else GD.Print($"YEK {MaxJoinedPlayers - DeadPlayers}");
 		DeadPlayers++;
-		CurrentPlayerCount--;
 
+		HasGameEnded();
+    }
+
+	private void HasGameEnded()
+	{
+        CurrentPlayerCount--;
+		GD.Print(CurrentPlayerCount);
         if (CurrentPlayerCount == 0)
         {
             GD.Print(TrackManager.FinishedPlayers);
             TrackManager.RaceTime.Stop();
-			TrackManager.ShowWinningPage();
+            TrackManager.ShowWinningPage();
         }
     }
 
@@ -161,16 +168,35 @@ public partial class MarbleTrack : Node3D
 
         if (!TrackManager.FinishedPlayers.ContainsKey(FinishedPlayers))
             TrackManager.FinishedPlayers.Add(FinishedPlayers, player);
-        else GD.Print($"YEK {FinishedPlayers}");
-        CurrentPlayerCount--;
 
-		if (CurrentPlayerCount == 0)
-		{
-			GD.Print(TrackManager.FinishedPlayers);
-			TrackManager.RaceTime.Stop();
-            TrackManager.ShowWinningPage();
-        }
+		HasGameEnded();
     }
+
+	public void Reset()
+	{
+		TrackManager.FinishedPlayers.Clear();
+		CurrentPlayerCount = 0;
+		FinishedPlayers = 0;
+		DeadPlayers = 0;
+		MaxJoinedPlayers = 0;
+        TrackManager.TitleBar.PlayerNumbers.Text = $"{CurrentPlayerCount}/{maxPlayerCount}";
+        allowMarblesSpawning = true;
+		InitSpawnpoints();
+		DeleteMarbles();
+		TrackManager.WinningPage.Hide();
+		TrackManager.TitleBar.Reset();
+		TrackManager.RaceTime.Reset();
+		TrackManager.Camera.ResetPosition();
+		EmitSignal(SignalName.OnReset);
+	}
+
+	private void DeleteMarbles()
+	{
+		foreach (var node in marblesParent.GetChildren())
+		{
+			node.Free();
+		}
+	}
 	#endregion
 
 	// Called when the node enters the scene tree for the first time.

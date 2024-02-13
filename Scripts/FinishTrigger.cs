@@ -11,11 +11,11 @@ public partial class FinishTrigger : Area3D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        BodyEntered += bla;
+        BodyEntered += FinishPlayer;
         finishedMarbles = new List<string>();
     }
 
-    private void bla(Node3D body)
+    private void FinishPlayer(Node3D body)
     {
         PlayerMarble parent;
         try
@@ -34,6 +34,11 @@ public partial class FinishTrigger : Area3D
                 finishedMarbles.Add(parent.ID);
             }
         }
+    }
+
+    public void Reset()
+    {
+        finishedMarbles.Clear();
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

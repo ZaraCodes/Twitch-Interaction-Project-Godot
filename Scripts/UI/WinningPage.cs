@@ -29,8 +29,17 @@ public partial class WinningPage : Panel
         SetWinnerData(name, color, winningTime);
     }
 
+    private void ResetLeaderboard()
+    {
+        foreach (var entry in leaderboard.GetChildren())
+        {
+            entry.Free();
+        }
+    }
+
     public void FillLeaderboard(Dictionary positions, TwitchGlobals twitchGlobals)
     {
+        ResetLeaderboard();
         if (!positions.ContainsKey(1))
         {
             SetWinnerData("Noone", "white", -1d);

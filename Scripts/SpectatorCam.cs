@@ -23,6 +23,8 @@ public partial class SpectatorCam : Camera3D
 
 	private Node3D referencedMarble;
 
+	private Vector3 startPosition;
+
 	public string RefId { get; set; }
 
 	private void Move(double delta)
@@ -118,6 +120,12 @@ public partial class SpectatorCam : Camera3D
 		RefId = string.Empty;
     }
 
+	public void ResetPosition()
+	{
+		if (referencedMarble != null) UnfollowCam();
+		Position = startPosition;
+	}
+
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventMouseMotion motionEvent)
@@ -158,6 +166,7 @@ public partial class SpectatorCam : Camera3D
 	public override void _Ready()
 	{
 		rotationX = Rotation.X;
+		startPosition = Position;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -45,6 +45,13 @@ public partial class TitleBar : HBoxContainer
         prompt.Text = JoinPrompt;
     }
 
+    public void Reset()
+    {
+        SetPromptToJoin();
+        StartGameButton.Disabled = false;
+        JoinButton.Disabled = false;
+    }
+
     public void CreateSpawnMessage(string name, string color)
     {
         var newJoinMessage = (JoinMessage)packedJoinMessageScene.Instantiate();

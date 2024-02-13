@@ -18,6 +18,12 @@ public partial class RaceTime : RichTextLabel
 		Text = GetFormattedTime(Time, bbcode);
 	}
 
+	public void Reset()
+	{
+		Time = 0d;
+		SetDisplay();
+	}
+
 	public static string GetFormattedTime(double time, string bbcode)
 	{
 		if (time == -1d) return "--:--.---";

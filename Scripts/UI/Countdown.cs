@@ -11,6 +11,9 @@ public partial class Countdown : Label
 	public delegate void OnCountdownFinishedEventHandler();
 	private int currentNumber;
 
+	[Signal]
+	public delegate void OnCountdownStartedEventHandler();
+
 	public void StartCountdown()
 	{
 		currentNumber = startNumber;
@@ -19,6 +22,7 @@ public partial class Countdown : Label
         timer.OneShot = false;
         timer.Timeout += SetState;
 		timer.Start(1d);
+		EmitSignal(SignalName.OnCountdownStarted);
 	}
 	private void SetLabel(string text)
 	{

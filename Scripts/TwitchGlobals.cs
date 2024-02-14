@@ -45,9 +45,10 @@ public partial class TwitchGlobals : Node
 	{
 		var playerData = new Dictionary()
 		{
-			["UsedId"] = id,
+			["UserId"] = id,
 			["DisplayName"] = displayName,
-			["Color"] = color
+			["Color"] = color,
+			["Pronouns"] = "-"
 		};
 		playerDatas[id] = playerData;
 	}
@@ -217,6 +218,7 @@ public partial class TwitchGlobals : Node
 		foreach (var userId in alejoUsers)
 		{
 			var user = FindUserById(userId);
+			if (user == null) continue;
 			var requestURL = $"https://pronouns.alejo.io/api/users/{((string)user["DisplayName"]).ToLower()}";
 			request.Request(requestURL);
 			var reply = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);

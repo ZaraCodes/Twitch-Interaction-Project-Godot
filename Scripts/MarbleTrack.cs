@@ -7,35 +7,40 @@ using System.Linq;
 public partial class MarbleTrack : Node3D
 {
 	#region Fields
+	/// <summary>Reference to the saved data related to twitch</summary>
 	public TwitchGlobals TwitchGlobals { get; private set; }
 	/// <summary>Array that contains all points on the track where marbles can spawn</summary>
 	private List<Vector3> spawnPoints;
-
+	/// <summary>The name of the map</summary>
 	[Export] public string MapName { get; private set; }
 	/// <summary>Node that is the parent of the spawnpoints</summary>
 	[Export] private Node3D spawnPointParent;
-
+	/// <summary>Parent object that will hold all marbles/// </summary>
 	[Export] private Node3D marblesParent;
-
+	/// <summary>The height where marbles below will delete themselves</summary>
 	[Export] public float DeathHeight { get; private set; }
-
+	/// <summary>Sets if marbles can spawn or not</summary>
 	private bool allowMarblesSpawning;
-
+	/// <summary>Sets how many players can join the map, depends on the number of spawnpoint objects</summary>
 	private int maxPlayerCount;
-
+	/// <summary>The current amount of active players in the map</summary>
 	public int CurrentPlayerCount { get; private set; }
-
+	/// <summary>Cache of the packed scene of a player marble</summary>
 	private PackedScene packedMarbleScene;
-
+	/// <summary>Reference to the TrackManager</summary>
 	public TrackManager TrackManager;
-
+	/// <summary>A Random Number Generator that is used to randomly select a spawn point for a new player</summary>
 	private RandomNumberGenerator rng;
-
+	/// <summary>The amount of players that have finished</summary>
 	public int FinishedPlayers { get; private set; }
-
+	/// <summary>The amount of players that didn't make it</summary>
 	public int DeadPlayers { get; private set; }
-
+	/// <summary>
+	/// 
+	/// </summary>
 	public int MaxJoinedPlayers { get; private set; }
+
+	public List<string> JoinedPlayers { get; private set; }
 
 	[Signal]
 	public delegate void OnResetEventHandler();
@@ -63,13 +68,17 @@ public partial class MarbleTrack : Node3D
 	{
 		if (!allowMarblesSpawning) return;
 
+		if (!message.TryGetValue("UserId", out var id)) return;
+		if (JoinedPlayers.Contains((string)id)) return;
+
 		if (message.TryGetValue("Text", out var value))
 		{
 			string text = (string)value;
 			if (!text.StartsWith("!play")) return;
 			if (spawnPoints.Count < 1) return;
 
-			TwitchGlobals.AddPlayerData(message);
+            JoinedPlayers.Add((string)id);
+            TwitchGlobals.AddPlayerData(message);
 			SpawnMarble(message);
 		}
 	}
@@ -147,7 +156,6 @@ public partial class MarbleTrack : Node3D
 	private void HasGameEnded()
 	{
         CurrentPlayerCount--;
-		GD.Print(CurrentPlayerCount);
         if (CurrentPlayerCount == 0)
         {
             GD.Print(TrackManager.FinishedPlayers);
@@ -183,6 +191,7 @@ public partial class MarbleTrack : Node3D
         allowMarblesSpawning = true;
 		InitSpawnpoints();
 		DeleteMarbles();
+		JoinedPlayers.Clear();
 		TrackManager.WinningPage.Hide();
 		TrackManager.TitleBar.Reset();
 		TrackManager.RaceTime.Reset();
@@ -212,6 +221,7 @@ public partial class MarbleTrack : Node3D
 		packedMarbleScene = GD.Load<PackedScene>("res://Scenes/PlayerMarble.tscn");
 		allowMarblesSpawning = true;
 		rng = new();
+		JoinedPlayers = new();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

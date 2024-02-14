@@ -60,6 +60,11 @@ public partial class TrackManager : Node3D
 		MarbleTrack.Reset();
 	}
 
+	public void OnCountdownStarted()
+	{
+		MarbleTrack.TwitchGlobals.GetPronouns();
+	}
+
 	#endregion
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

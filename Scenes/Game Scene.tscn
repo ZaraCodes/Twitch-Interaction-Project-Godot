@@ -1005,6 +1005,8 @@ environment = SubResource("Environment_3850u")
 [connection signal="pressed" from="UI/Title Bar/HBoxContainer/Join Button" to="Track Manager" method="TestTrack"]
 [connection signal="OnCountdownFinished" from="UI/Countdown" to="UI/Race Time" method="Start"]
 [connection signal="OnCountdownFinished" from="UI/Countdown" to="Track Manager" method="StartGame"]
+[connection signal="OnCountdownStarted" from="UI/Countdown" to="Track Manager" method="OnCountdownStarted"]
 [connection signal="pressed" from="UI/Winning Page/Restart Button" to="Track Manager" method="Reset"]
+[connection signal="pressed" from="UI/Winning Page/Quit Button" to="UI/Winning Page" method="QuitGame"]
 [connection signal="OnReset" from="Track Manager/MarbleTrack" to="Track Manager/MarbleTrack/Finish/Finish Trigger" method="Reset"]
 [connection signal="OnMarbleFinished" from="Track Manager/MarbleTrack/Finish/Finish Trigger" to="Track Manager/MarbleTrack" method="FinishPlayer"]

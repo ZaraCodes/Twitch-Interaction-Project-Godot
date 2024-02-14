@@ -8,17 +8,17 @@ public partial class WinningPage : Panel
     [Export] private RichTextLabel winnerNameLabel;
     [Export] private RichTextLabel winningTimeLabel;
 
-    public void SetWinnerData(string winnerName, string winnerColor, double winningTime)
+    public void SetWinnerData(string name, string pronouns, string color, double time)
     {
-        winnerNameLabel.Text = $"[center][font_size=30][b][color={winnerColor}]{winnerName}[/color]\nwins!";
-        winningTimeLabel.Text = RaceTime.GetFormattedTime(winningTime, "[center][font_size=20][i]");
+        winnerNameLabel.Text = $"[center][font_size=30][b][color={color}][hint={pronouns}]{name}[/hint][/color]\nwins!";
+        winningTimeLabel.Text = RaceTime.GetFormattedTime(time, "[center][font_size=20][i]");
     }
 
-    public void AddLeaderboardEntry(int position, string name, string color, double time)
+    public void AddLeaderboardEntry(int position, string name, string pronouns, string color, double time)
     {
         var packedLeaderboardEntry = GD.Load<PackedScene>("res://Scenes/leaderboard_entry.tscn");
         var entry = (LeaderboardEntry)packedLeaderboardEntry.Instantiate();
-        entry.Init(position, name, color, time);
+        entry.Init(position, name, pronouns, color, time);
         leaderboard.AddChild(entry);
     }
 
@@ -26,7 +26,8 @@ public partial class WinningPage : Panel
     {
         var name = (string)winner["DisplayName"];
         var color = (string)winner["Color"];
-        SetWinnerData(name, color, winningTime);
+        var pronouns = (string)winner["Pronouns"];
+        SetWinnerData(name, pronouns, color, winningTime);
     }
 
     private void ResetLeaderboard()
@@ -42,7 +43,7 @@ public partial class WinningPage : Panel
         ResetLeaderboard();
         if (!positions.ContainsKey(1))
         {
-            SetWinnerData("Noone", "white", -1d);
+            SetWinnerData("Noone", "-", "white", -1d);
         }
         var winner = (Dictionary)positions[1];
         SetWinner(twitchGlobals.FindUserById((string)winner["id"]), (double)winner["time"]);
@@ -53,7 +54,14 @@ public partial class WinningPage : Panel
                 break;
             var player = (Dictionary)positions[i];
             var playerData = twitchGlobals.FindUserById((string)player["id"]);
-            AddLeaderboardEntry(i, (string)playerData["DisplayName"], (string)playerData["Color"], (double)player["time"]);
+            var pronouns = "none";
+            if (playerData.ContainsKey("Pronouns")) pronouns = (string)playerData["Pronouns"];
+            AddLeaderboardEntry(i, (string)playerData["DisplayName"], pronouns, (string)playerData["Color"], (double)player["time"]);
         }
+    }
+
+    public void QuitGame()
+    {
+        GetTree().Quit();
     }
 }

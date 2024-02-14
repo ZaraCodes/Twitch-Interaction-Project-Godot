@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://btcn44mcpfl2p"]
+[gd_scene load_steps=5 format=3 uid="uid://btcn44mcpfl2p"]
 
 [ext_resource type="Script" path="res://Scripts/UI/MainMenu.cs" id="1_cfgny"]
 [ext_resource type="Script" path="res://Scripts/UI/SettingsMenu.cs" id="2_7agve"]
-[ext_resource type="Script" path="res://Scripts/UI/MainMenuChatDisplay.cs" id="3_e4gdv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m8eh0"]
+font_size = 48
+
+[sub_resource type="LabelSettings" id="LabelSettings_scuol"]
 
 [node name="Main Menu Scene" type="Node3D"]
 
@@ -13,7 +17,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_e4gdv")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchors_preset = 8
@@ -29,10 +32,31 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Main Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu")]
+visible = false
 layout_mode = 2
 script = ExtResource("1_cfgny")
 mainMenu = NodePath(".")
 settingsMenu = NodePath("../Settings Menu")
+
+[node name="Title" type="Label" parent="CenterContainer/Main Menu"]
+layout_mode = 2
+offset_left = -215.0
+offset_top = -215.0
+offset_right = 207.0
+offset_bottom = -148.0
+text = "Zarbles on Stream"
+label_settings = SubResource("LabelSettings_m8eh0")
+horizontal_alignment = 1
+
+[node name="Title2" type="Label" parent="CenterContainer/Main Menu"]
+layout_mode = 2
+offset_left = -215.0
+offset_top = -152.0
+offset_right = 207.0
+offset_bottom = -85.0
+text = "Modul: 6FSC1XD002 - Krister Wolfhard"
+label_settings = SubResource("LabelSettings_scuol")
+horizontal_alignment = 1
 
 [node name="Main Menu Items" type="VBoxContainer" parent="CenterContainer/Main Menu"]
 layout_mode = 1
@@ -70,7 +94,6 @@ layout_mode = 2
 text = "Quit"
 
 [node name="Settings Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu", "responseMessage")]
-visible = false
 layout_mode = 2
 script = ExtResource("2_7agve")
 mainMenu = NodePath("../Main Menu")
@@ -99,27 +122,10 @@ To disconnect, go to your Twitch Account Settings to revoke permissions."
 fit_content = true
 
 [node name="Channel Connect Container" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
-visible = false
-layout_mode = 2
-
-[node name="Channel Name Edit" type="LineEdit" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container"]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 2
-placeholder_text = "Channel Name"
-editable = false
-caret_blink = true
-
-[node name="Connect Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container"]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 2
-disabled = true
-text = "Connect"
-
-[node name="Channel Connect Container2" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
 layout_mode = 2
 alignment = 1
 
-[node name="Login Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container2"]
+[node name="Login Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -130,6 +136,22 @@ layout_mode = 2
 text = " "
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="TextEdit" type="TextEdit" parent="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer2"]
+custom_minimum_size = Vector2(200, 35)
+layout_mode = 2
+placeholder_text = "Color Redemtion Name"
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
 layout_mode = 2
@@ -146,7 +168,5 @@ text = "Back"
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Button" to="CenterContainer/Main Menu" method="GetPronouns"]
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Settings Button" to="CenterContainer/Main Menu" method="OpenSettingsMenu"]
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Quit Button" to="CenterContainer/Main Menu" method="QuitGame"]
-[connection signal="text_changed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container/Channel Name Edit" to="CenterContainer/Settings Menu" method="SetChannelName"]
-[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container/Connect Button" to="CenterContainer/Settings Menu" method="ConnectToTwitch"]
-[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container2/Login Button" to="CenterContainer/Settings Menu" method="ConnectToTwitch"]
+[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container/Login Button" to="CenterContainer/Settings Menu" method="ConnectToTwitch"]
 [connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer/Back Button" to="CenterContainer/Settings Menu" method="GoBackToMainMenu"]

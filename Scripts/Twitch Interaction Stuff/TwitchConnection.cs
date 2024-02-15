@@ -402,7 +402,10 @@ public partial class TwitchConnection : Node
 					AddChild(request);
 					string[] headers = new[] { USER_AGENT, "Content-Type: application/x-www-form-urlencoded" };
 					//request.RequestCompleted += SaveToken;
-					request.Request("https://id.twitch.tv/oauth2/token", headers, HttpClient.Method.Post, $"client_id={clientId}&client_secret={clientSecret}&code={data["code"]}&grant_type=authorization_code&redirect_uri=http://localhost:39504");
+					request.Request("https://id.twitch.tv/oauth2/token",
+									headers,
+									HttpClient.Method.Post,
+									$"client_id={clientId}&client_secret={clientSecret}&code={data["code"]}&grant_type=authorization_code&redirect_uri=http://localhost:39504");
 
 					var answer = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);
 					request.QueueFree();

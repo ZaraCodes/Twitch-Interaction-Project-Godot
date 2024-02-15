@@ -32,7 +32,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Main Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu")]
-visible = false
 layout_mode = 2
 script = ExtResource("1_cfgny")
 mainMenu = NodePath(".")
@@ -101,6 +100,7 @@ settingsMenu = NodePath(".")
 responseMessage = NodePath("Settings Menu Items/Connection Feedback")
 
 [node name="Settings Menu Items" type="VBoxContainer" parent="CenterContainer/Settings Menu"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

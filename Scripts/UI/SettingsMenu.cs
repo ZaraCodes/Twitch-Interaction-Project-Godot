@@ -55,6 +55,14 @@ public partial class SettingsMenu : Control
 		settingsMenu.Hide();
 	}
 
+	/// <summary>
+	/// Opens the user data folder
+	/// </summary>
+	public void OpenUserDataFolder()
+	{
+		OS.ShellShowInFileManager(ProjectSettings.GlobalizePath("user://"));
+	}
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

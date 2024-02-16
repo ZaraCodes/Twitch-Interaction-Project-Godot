@@ -166,6 +166,17 @@ placeholder_text = "Color Redemtion Name"
 [node name="HSeparator2" type="HSeparator" parent="CenterContainer/Settings Menu/Settings Menu Items"]
 layout_mode = 2
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="User Data Button" type="Button" parent="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer3"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Open User Data Folder"
+
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
 layout_mode = 2
 size_flags_horizontal = 4
@@ -247,6 +258,7 @@ text = "Back"
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Credits Button" to="CenterContainer/Credits" method="show"]
 [connection signal="pressed" from="CenterContainer/Main Menu/Main Menu Items/Quit Button" to="CenterContainer/Main Menu" method="QuitGame"]
 [connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/Channel Connect Container/Login Button" to="CenterContainer/Settings Menu" method="ConnectToTwitch"]
+[connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer3/User Data Button" to="CenterContainer/Settings Menu" method="OpenUserDataFolder"]
 [connection signal="pressed" from="CenterContainer/Settings Menu/Settings Menu Items/HBoxContainer/Back Button" to="CenterContainer/Settings Menu" method="GoBackToMainMenu"]
 [connection signal="meta_clicked" from="CenterContainer/Credits/VBoxContainer/Other Code" to="CenterContainer/Credits" method="OnURLPressed"]
 [connection signal="meta_clicked" from="CenterContainer/Credits/VBoxContainer/Kenney" to="CenterContainer/Credits" method="OnURLPressed"]

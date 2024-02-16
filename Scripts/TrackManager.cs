@@ -65,15 +65,34 @@ public partial class TrackManager : Node3D
 		MarbleTrack.TwitchGlobals.GetPronouns();
 	}
 
+	public void OnTwitchEvent(Dictionary eventData)
+	{
+		if (eventData.TryGetValue("reward", out var reward))
+		{
+			var rewardDict = (Dictionary)Json.ParseString((string)reward);
+			if (rewardDict.TryGetValue("title", out var title))
+			{
+				if ((string)title == "Color your marble!")
+				{
+					var userId = (string)eventData["user_id"];
+					var color = new Color((string)MarbleTrack.TwitchGlobals.FindUserById(userId)["Color"]);
+					MarbleTrack.ColorMarble(userId, color);
+				}
+			}
+        }
+	}
+
 	#endregion
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		FinishedPlayers = new Dictionary();
-	}
+		var twitchConnector = GetNode<TwitchConnection>("/root/TwitchConnection");
+		twitchConnector.Event += OnTwitchEvent;
+    }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 	}
 }

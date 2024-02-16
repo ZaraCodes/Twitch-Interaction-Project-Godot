@@ -48,6 +48,7 @@ label_settings = SubResource("LabelSettings_m8eh0")
 horizontal_alignment = 1
 
 [node name="Title2" type="Label" parent="CenterContainer/Main Menu"]
+visible = false
 layout_mode = 2
 offset_left = -215.0
 offset_top = -152.0
@@ -93,6 +94,7 @@ layout_mode = 2
 text = "Quit"
 
 [node name="Settings Menu" type="Control" parent="CenterContainer" node_paths=PackedStringArray("mainMenu", "settingsMenu", "responseMessage")]
+visible = false
 layout_mode = 2
 script = ExtResource("2_7agve")
 mainMenu = NodePath("../Main Menu")
@@ -100,7 +102,6 @@ settingsMenu = NodePath(".")
 responseMessage = NodePath("Settings Menu Items/Connection Feedback")
 
 [node name="Settings Menu Items" type="VBoxContainer" parent="CenterContainer/Settings Menu"]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -138,9 +139,11 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+visible = false
 layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/Settings Menu/Settings Menu Items"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1

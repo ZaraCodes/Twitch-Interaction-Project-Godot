@@ -158,7 +158,7 @@ public partial class MarbleTrack : Node3D
         CurrentPlayerCount--;
         if (CurrentPlayerCount == 0)
         {
-            GD.Print(TrackManager.FinishedPlayers);
+            //GD.Print(TrackManager.FinishedPlayers);
             TrackManager.RaceTime.Stop();
             TrackManager.ShowWinningPage();
         }
@@ -206,6 +206,22 @@ public partial class MarbleTrack : Node3D
 			node.Free();
 		}
 	}
+
+	public void ColorMarble(string id, Color color)
+	{
+		PlayerMarble marble = null;
+		foreach (var player in marblesParent.GetChildren())
+		{
+			if (player.Name == id)
+			{
+				marble = (PlayerMarble) player;
+				break;
+			}
+		}
+		if (marble == null) return;
+		marble.SetCustomColor(color);
+	}
+
 	#endregion
 
 	// Called when the node enters the scene tree for the first time.

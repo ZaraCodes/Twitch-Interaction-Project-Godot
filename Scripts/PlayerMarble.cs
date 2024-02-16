@@ -6,6 +6,7 @@ public partial class PlayerMarble : Node3D
 	public string ID;
 	private MarbleTrack marbleTrack;
 	[Export] private BoxContainer boxContainer;
+	[Export] private MeshInstance3D meshInstance;
 	[Export] private RichTextLabel label;
 	[Export] private RigidBody3D rigidBody;
 	[Export] private TextureRect[] badges;
@@ -68,6 +69,13 @@ public partial class PlayerMarble : Node3D
 				numberOfBadges++;
 			}
 		}
+	}
+
+	public void SetCustomColor(Color color)
+	{
+		StandardMaterial3D material = new();
+		material.AlbedoColor = color;
+		meshInstance.MaterialOverride = material;
 	}
 
 	public void SetViewTarget(InputEvent @event)

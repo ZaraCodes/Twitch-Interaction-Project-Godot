@@ -27,7 +27,7 @@ public partial class TwitchConnection : Node
 	public delegate void OnChatMessageEventHandler(Dictionary chatMessage);
 
 	[Signal]
-	public delegate void EventEventHandler(string type, Dictionary data);
+	public delegate void EventEventHandler(Dictionary data);
 
 	[Signal]
 	public delegate void EventsIdEventHandler(string sessionId);
@@ -74,7 +74,6 @@ public partial class TwitchConnection : Node
 	private const string URL = "irc.chat.twitch.tv";
 	private const int PORT = 6667;
 
-	private const string USER = "TearsOfTheZara";
 	private const string OAuth = "";
 	public string Channel = string.Empty;
 
@@ -100,10 +99,10 @@ public partial class TwitchConnection : Node
 	private int maxReconnectionAttempts;
 	private int reconnectionAttemptCounter;
 
-	string secret = "9afs520e1h6rinco09tn90przx1dvh";
-	string id = "ko7pk7ewvitihy8aqedz5qyt31dtmc";
-
-	public async void Authenticate()
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L146
+    /// </summary>
+    public async void Authenticate()
 	{
 		GD.Print("[Authenticate] Loading Config...");
 		if (!LoadConfig())
@@ -178,7 +177,6 @@ public partial class TwitchConnection : Node
 				GD.Print("[Authenticate] Token invalid");
 				if (token.TryGetValue("refresh_token", out var refresh_token))
 				{
-					GD.Print($"[Authenticate] Refresh token: {refresh_token}");
 					if ((string)refresh_token == string.Empty)
 					{
 						GetToken();
@@ -221,7 +219,10 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	private async void RefreshToken()
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L271
+    /// </summary>
+    private async void RefreshToken()
 	{
 		await ToSignal(GetTree().CreateTimer(3600), Timer.SignalName.Timeout);
 
@@ -252,7 +253,11 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	private async void IsTokenValid(string token)
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L259
+    /// </summary>
+    /// <param name="token"></param>
+    private async void IsTokenValid(string token)
 	{
 		GD.Print("[IsTokenValid] Begin");
 		var request = new HttpRequest();
@@ -263,7 +268,6 @@ public partial class TwitchConnection : Node
 		if ((int)data[1] == 200)
 		{
 			var payload = (Dictionary)Json.ParseString(data[3].AsByteArray().GetStringFromUtf8());
-			GD.Print($"[IsTokenValid] Payload: {payload}");
 
 			userId = (string)payload["user_id"];
 			GD.Print("[IsTokenValid] Validation successful.");
@@ -280,7 +284,11 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	private async void RefreshAccessToken(string refresh)
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L179
+    /// </summary>
+    /// <param name="refresh"></param>
+    private async void RefreshAccessToken(string refresh)
 	{
 		GD.Print("[RefreshAccessToken] Begin");
 		var request = new HttpRequest();
@@ -293,7 +301,7 @@ public partial class TwitchConnection : Node
 		var reply = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);
 		request.QueueFree();
 		var response = (Dictionary)Json.ParseString(reply[3].AsByteArray().GetStringFromUtf8());
-		GD.Print($"[RefreshAccessToken] Response: {response}");
+		
 		if ((int)reply[1] == 400)
 		{
 			GD.Print("[RefreshAccessToken] Refreshing token failed, requesting new token");
@@ -336,7 +344,10 @@ public partial class TwitchConnection : Node
 		this.token = (Dictionary)Json.ParseString(token);
 	}
 
-	private async void GetToken()
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L197
+    /// </summary>
+    private async void GetToken()
 	{
 		GD.Print("[GetToken] Fetching new token");
 		var scope = string.Empty;
@@ -371,7 +382,7 @@ public partial class TwitchConnection : Node
 				}
 				peer.PutUtf8String("success!");
 				int start = response.Find("?");
-				GD.Print(response);
+				
 				response = response.Substring(start + 1, response.Find(" ", start) - start);
 				Dictionary data = new();
 				foreach (string entry in response.Split("&"))
@@ -427,7 +438,13 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	private void SendResponse(StreamPeer peer, string response, byte[] body)
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L249
+    /// </summary>
+    /// <param name="peer"></param>
+    /// <param name="response"></param>
+    /// <param name="body"></param>
+    private void SendResponse(StreamPeer peer, string response, byte[] body)
 	{
 		peer.PutData($"HTTP/1.1 {response}\r\n".ToUtf8Buffer());
 		peer.PutData("Server: ZTI (Godot Engine)\r\n".ToUtf8Buffer());
@@ -550,10 +567,6 @@ public partial class TwitchConnection : Node
 		var answer = await ToSignal(request, HttpRequest.SignalName.RequestCompleted);
 		request.QueueFree();
 
-		//var file = Godot.FileAccess.Open("user://jsontest.txt", Godot.FileAccess.ModeFlags.Write);
-		//// string jsonText = ((string)Json.ParseString(answer[3].AsByteArray().GetStringFromUtf8())).Replace('<', '"').Replace('>', '"');
-		//string jsonText = ((string)Json.ParseString(answer[3].AsByteArray().GetStringFromUtf8())).Replace(" ", "").Replace("<null>", "\"\"");
-		//file.StoreString(jsonText);
 
 		if ((int)answer[1] == 200)
 		{
@@ -589,7 +602,10 @@ public partial class TwitchConnection : Node
 		return true;
 	}
 
-	private void ConnectWebSocket()
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L387
+    /// </summary>
+    private void ConnectWebSocket()
 	{
 		eventsub = new WebSocketPeer();
 		var error = eventsub.ConnectToUrl("wss://eventsub.wss.twitch.tv/ws");
@@ -601,7 +617,13 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	public async void SubscribeToEvent(string eventName, int version, Dictionary conditions)
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L396
+    /// </summary>
+    /// <param name="eventName"></param>
+    /// <param name="version"></param>
+    /// <param name="conditions"></param>
+    public async void SubscribeToEvent(string eventName, int version, Dictionary conditions)
 	{
 		var data = new Dictionary()
 		{
@@ -632,7 +654,10 @@ public partial class TwitchConnection : Node
 		GD.Print($"[SubscribeToEvent] Now listening to {eventName}");
 	}
 
-	private void ProcessWebsocket()
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L321
+    /// </summary>
+    private void ProcessWebsocket()
 	{
 		eventsub.Poll();
 		var state = eventsub.GetReadyState();
@@ -661,7 +686,11 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	private void ProcessEvent(byte[] data)
+    /// <summary>
+    /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L348
+    /// </summary>
+    /// <param name="data"></param>
+    private void ProcessEvent(byte[] data)
 	{
 		var message = (Dictionary)Json.ParseString(data.GetStringFromUtf8());
 		var messageId = (string)((Dictionary)message["metadata"])["message_id"];
@@ -677,7 +706,6 @@ public partial class TwitchConnection : Node
 				{
 					sessionID = (string)((Dictionary)payload["session"])["id"];
 					keepaliveTimeout = (int)((Dictionary)payload["session"])["keepalive_timeout_seconds"];
-					GD.Print(message);
 					EmitSignal(SignalName.EventsId, sessionID);
 					break;
 				}

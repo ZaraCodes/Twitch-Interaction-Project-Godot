@@ -1,19 +1,28 @@
 using Godot;
 using System;
 
+/// <summary>
+/// This countdown is used before the marble race starts
+/// </summary>
 public partial class Countdown : Label
 {
+	/// <summary>The timer used between each step</summary>
 	[Export] private Timer timer;
 
+	/// <summary>The number at which the timer starts</summary>
 	[Export] private int startNumber;
 
 	[Signal]
 	public delegate void OnCountdownFinishedEventHandler();
+	/// <summary>The number the countdown is currently at</summary>
 	private int currentNumber;
 
 	[Signal]
 	public delegate void OnCountdownStartedEventHandler();
 
+	/// <summary>
+	/// Starts the countdown
+	/// </summary>
 	public void StartCountdown()
 	{
 		currentNumber = startNumber;
@@ -24,11 +33,19 @@ public partial class Countdown : Label
 		timer.Start(1d);
 		EmitSignal(SignalName.OnCountdownStarted);
 	}
+
+	/// <summary>
+	/// Sets the label text to the current countdown number
+	/// </summary>
+	/// <param name="text"></param>
 	private void SetLabel(string text)
 	{
 		Text = text;
 	}
 
+	/// <summary>
+	/// Sets the current number and the label state
+	/// </summary>
 	private void SetState()
 	{
 		if (currentNumber > 1)
@@ -47,19 +64,10 @@ public partial class Countdown : Label
 		}
 	}
 
+	/// <summary>Hides the label</summary>
 	private void HideLabel()
 	{
 		timer.Timeout -= HideLabel;
 		Visible = false;
-	}
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

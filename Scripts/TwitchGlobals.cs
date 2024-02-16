@@ -3,6 +3,9 @@ using Godot.Collections;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Node that holds global variables about the game and twitch
+/// </summary>
 public partial class TwitchGlobals : Node
 {
 	[Signal]
@@ -17,11 +20,21 @@ public partial class TwitchGlobals : Node
 	[Signal]
 	public delegate ImageTexture TextureReadyEventHandler();
 
+	/// <summary>Dictionary that contains data about players</summary>
 	private Dictionary playerDatas = new Dictionary();
+	/// <summary>Dictionary that contains data about badges</summary>
 	private Dictionary badgeData = new Dictionary();
+	/// <summary>Dictionary that contains the downloaded badges</summary>
 	private Dictionary downloadedBadges = new Dictionary();
+	/// <summary>
+	/// Dictionary that contains the pronouns from users of the alejo pronouns plugin
+	/// </summary>
 	private System.Collections.Generic.Dictionary<string, string> alejoPronouns;
 
+	/// <summary>
+	/// Adds player data
+	/// </summary>
+	/// <param name="message">message that the player sent</param>
 	public void AddPlayerData(Dictionary message)
 	{
 		var userId = (string)message["UserId"];
@@ -41,6 +54,10 @@ public partial class TwitchGlobals : Node
 		}
 	}
 
+	/// <summary>Adds test player data</summary>
+	/// <param name="id">a fake id</param>
+	/// <param name="displayName">a fake name</param>
+	/// <param name="color">a fake color</param>
 	public void AddPlayerData(string id, string displayName, string color)
 	{
 		var playerData = new Dictionary()
@@ -53,6 +70,10 @@ public partial class TwitchGlobals : Node
 		playerDatas[id] = playerData;
 	}
 
+	/// <summary>
+	/// Adds Badge data from a badge to the badge data dictionary
+	/// </summary>
+	/// <param name="badgeInfo"></param>
 	public void AddBadgeData(string badgeInfo)
 	{
 		badgeInfo = badgeInfo.Replace("\\'", "");
@@ -75,6 +96,12 @@ public partial class TwitchGlobals : Node
 		this.badgeData[badgeData["set_id"]] = badge;
 	}
 
+	/// <summary>
+	/// Tries to get a badge from the downloaded badges dictionary
+	/// </summary>
+	/// <param name="badge">The badge we're looking for</param>
+	/// <param name="imageTexture">The image texture we assign the badge to if we find it</param>
+	/// <returns></returns>
 	public bool TryGetBadge(string badge, out ImageTexture imageTexture)
 	{
 		if (downloadedBadges.ContainsKey(badge))
@@ -86,6 +113,10 @@ public partial class TwitchGlobals : Node
 		return false;
 	}
 
+	/// <summary>
+	/// Downloads a badge based on the link from the badge data
+	/// </summary>
+	/// <param name="badge"></param>
 	public async void DownloadBadge(string badge)
 	{
 		var downloadURL = GetBadgeDownloadURL(badge);
@@ -116,6 +147,11 @@ public partial class TwitchGlobals : Node
 		EmitSignal(SignalName.BadgeDownloaded);
 	}
 
+	/// <summary>
+	/// Returns a download url from badge data
+	/// </summary>
+	/// <param name="badge"></param>
+	/// <returns></returns>
 	private string GetBadgeDownloadURL(string badge)
 	{
 		var setId = badge.Split('/')[0];
@@ -133,17 +169,29 @@ public partial class TwitchGlobals : Node
 		return string.Empty;
 	}
 
+	/// <summary>
+	/// Finds a user by id in the player data dictionary. returns null if no player is found
+	/// </summary>
+	/// <param name="userId"></param>
+	/// <returns></returns>
 	public Dictionary FindUserById(string userId)
 	{
 		if (playerDatas.TryGetValue(userId, out var user)) return (Dictionary)user;
 		return null;
 	}
 
+	/// <summary>
+	/// Sets a user based on it's dictionary and id
+	/// </summary>
+	/// <param name="user"></param>
 	public void SetUser(Dictionary user)
 	{
 		playerDatas[(string)user["UserId"]] = user;
 	}
 
+	/// <summary>
+	/// Tries to get the pronouns of users from two different plugins for this purpose
+	/// </summary>
 	public async void GetPronouns()
 	{
 		var pronoundbUsers = new List<string>();
@@ -231,6 +279,9 @@ public partial class TwitchGlobals : Node
 		}
 	}
 
+	/// <summary>
+	/// Adds an eventsub subscription for channelpoint redeems
+	/// </summary>
 	public async void AddEventsubSubscriptions()
 	{
 		await ToSignal(GetTree().CreateTimer(1), Timer.SignalName.Timeout);
@@ -254,10 +305,5 @@ public partial class TwitchGlobals : Node
 		//twitchConnector.OnChatMessage += AddPlayerData;
 		twitchConnector.EventsubConnected += AddEventsubSubscriptions;
 		twitchConnector.BadgeData += AddBadgeData;
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

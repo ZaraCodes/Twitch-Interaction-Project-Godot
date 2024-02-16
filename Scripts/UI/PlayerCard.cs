@@ -1,26 +1,36 @@
 using Godot;
 using System;
 
+/// <summary>
+/// Unused Node that was supposed to display information about the player during the race
+/// </summary>
 public partial class PlayerCard : Panel
 {
+	/// <summary>Reference to the twitch globals node</summary>
 	TwitchGlobals twitchGlobals;
 
+	/// <summary>Reference to the label that displays the player's name</summary>
 	[Export]
 	private RichTextLabel PlayerName;
 
+	/// <summary>Reference to the label that displays the player's pronouns</summary>
 	[Export]
 	private RichTextLabel PlayerPronouns;
 
+	/// <summary>An array of texture rects that contains three items for the badges</summary>
 	[Export]
 	private TextureRect[] badges;
 
+	/// <summary>Reference to the label that displays how often that player has won</summary>
 	[Export]
 	private RichTextLabel Wins;
 
+	/// <summary>
+	/// Shows info about the player
+	/// </summary>
+	/// <param name="userId">The player to display info about</param>
 	public async void ShowCard(string userId)
 	{
-        GD.Print("bla");
-
         foreach (var badge in this.badges)
 		{
 			badge.Texture = null;
@@ -54,6 +64,10 @@ public partial class PlayerCard : Panel
 		Visible = true;
     }
 
+	/// <summary>
+	/// Sets the wins label
+	/// </summary>
+	/// <param name="wins"></param>
 	public void SetWins(int wins)
 	{
 		Wins.Text = $"Wins: [b] {wins}";
@@ -63,11 +77,5 @@ public partial class PlayerCard : Panel
     public override void _Ready()
 	{
         twitchGlobals = GetNode<TwitchGlobals>("/root/TwitchGlobals");
-
     }
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-	{
-	}
 }

@@ -15,9 +15,6 @@ public partial class TwitchConnection : Node
 	public delegate void UserTokenCheckedEventHandler(string login);
 
 	[Signal]
-	public delegate void UserTokenInvalidEventHandler();
-
-	[Signal]
 	public delegate void AuthenticatedEventHandler();
 
 	[Signal]
@@ -50,56 +47,78 @@ public partial class TwitchConnection : Node
 	[Signal]
 	public delegate void UserTokenRefreshedEventHandler(Dictionary data);
 
-	//[Signal]
-	//public delegate void OnChannelpointsRedeemed()
-
+	/// <summary>Tcp Client responsible for sending and receiving chat messages</summary>
 	public TcpClient TwitchClient { get; private set; }
 
+	/// <summary>Tcp Server that's used for getting the authorization code</summary>
 	private TcpServer server;
+	/// <summary>This is used to connect to the server</summary>
 	private StreamPeerTcp peer;
 
-
+	/// <summary>Websocket for subscribing to twitch events</summary>
 	private WebSocketPeer eventsub;
+	/// <summary>Used to save eventsub messages to avoid responding to the same message twice</summary>
 	private Dictionary eventsubMessages;
+	/// <summary>Tracks if the eventsub is currently connected</summary>
 	private bool eventsubConnected;
-	private bool eventsubRestarting;
+	/// <summary>The url to connect to in case the eventsub loses connection</summary>
 	private string eventsubReconnectURL;
+	/// <summary>The session Id for the current eventsub connection</summary>
 	private string sessionID;
+	/// <summary>Time keep alive timeout for the current eventsub connection</summary>
 	private int keepaliveTimeout;
+	/// <summary>The timestamp of the last keepalive message</summary>
 	private ulong lastKeepalive;
 
+	/// <summary>This is used to create a read stream from the twitch client</summary>
 	private StreamReader reader;
+	/// <summary>This is used to create a write stream from the twitch client</summary>
 	private StreamWriter writer;
 
+	/// <summary>The url for connecting to the twitch irc chat</summary>
 	private const string URL = "irc.chat.twitch.tv";
+	/// <summary>The port required to connect to the twitch irc chat</summary>
 	private const int PORT = 6667;
 
-	private const string OAuth = "";
+	/// <summary>The channel name to connect to</summary>
 	public string Channel = string.Empty;
 
+	/// <summary>Dictionary that contains the token with all of its associated data</summary>
 	private Dictionary token;
+	/// <summary>The username of the connected twitch account</summary>
 	private string username;
+	/// <summary>The user id of the connected twitch account</summary>
 	private string userId;
+	/// <summary>The user id of the connected twitch account</summary>
 	public string UserId { get { return userId; } }
 
+	/// <summary>The client id of the application registered at twitch</summary>
 	private string clientId = string.Empty;
+	/// <summary>The client secret of the application registered at twitch</summary>
 	private string clientSecret = string.Empty;
+	/// <summary>The scopes this application will request from twitch</summary>
 	private string[] scopes = new string[] { "channel:read:redemptions", "chat:edit", "chat:read" };
 
+	/// <summary>The user agent of this application</summary>
 	private const string USER_AGENT = "User-Agent: ZTI 0.1 (Godot Engine)";
 
-	public List<PlayerData> PlayerDatas { get; private set; }
+	/// <summary>List of chat responses to work through</summary>
 	private List<ChatResponse> chatResponses = new();
 
 	/// <summary>Timer that triggers a reconnection</summary>
 	private Timer reconnectionTimer;
 
+	/// <summary>Tracks if currently the client is trying to reconnect with twitch</summary>
 	private bool attemptingReconnection;
+	/// <summary>The interval for the next reconnection attempt</summary>
 	private double reconnectionInterval;
+	/// <summary>The max amount of reconnection attempts</summary>
 	private int maxReconnectionAttempts;
+	/// <summary>The current count of reconnection attempts</summary>
 	private int reconnectionAttemptCounter;
 
     /// <summary>
+	/// Tries to authenticate the application with the twitch api.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L146
     /// </summary>
     public async void Authenticate()
@@ -220,6 +239,7 @@ public partial class TwitchConnection : Node
 	}
 
     /// <summary>
+	/// Checks if the token is still valid every hour.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L271
     /// </summary>
     private async void RefreshToken()
@@ -233,7 +253,6 @@ public partial class TwitchConnection : Node
 		if ((string)result[0] == string.Empty)
 		{
 			GD.Print("[RefreshToken] User token invalid");
-			EmitSignal(SignalName.UserTokenInvalid);
 			RefreshAccessToken();
 			return;
 		}
@@ -254,6 +273,7 @@ public partial class TwitchConnection : Node
 	}
 
     /// <summary>
+	/// Checks if the token is valid
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L259
     /// </summary>
     /// <param name="token"></param>
@@ -285,6 +305,7 @@ public partial class TwitchConnection : Node
 	}
 
     /// <summary>
+	/// Requests a new access token based on the saved refresh token.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L179
     /// </summary>
     /// <param name="refresh"></param>
@@ -325,6 +346,9 @@ public partial class TwitchConnection : Node
 		EmitSignal(SignalName.UserTokenRefreshed, response);
 	}
 
+	/// <summary>
+	/// Calls the actual refresh access token if there is an access token in the current token dictionary
+	/// </summary>
 	private async void RefreshAccessToken()
 	{
 		if (token.TryGetValue("refresh_token", out var refresh_token))
@@ -339,12 +363,17 @@ public partial class TwitchConnection : Node
 		}
 	}
 
+	/// <summary>
+	/// Sets the token dictionary 
+	/// </summary>
+	/// <param name="token">The new token as a string</param>
 	private void SetToken(string token)
 	{
 		this.token = (Dictionary)Json.ParseString(token);
 	}
 
     /// <summary>
+	/// Requests a new token from twitch.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L197
     /// </summary>
     private async void GetToken()
@@ -412,7 +441,7 @@ public partial class TwitchConnection : Node
 					HttpRequest request = new();
 					AddChild(request);
 					string[] headers = new[] { USER_AGENT, "Content-Type: application/x-www-form-urlencoded" };
-					//request.RequestCompleted += SaveToken;
+
 					request.Request("https://id.twitch.tv/oauth2/token",
 									headers,
 									HttpClient.Method.Post,
@@ -516,6 +545,9 @@ public partial class TwitchConnection : Node
 		chatResponses.Add(new ChatResponse(message, Channel, id));
 	}
 
+	/// <summary>
+	/// Attempts to reconnect to twitch
+	/// </summary>
 	private void AttemptReconnect()
 	{
 		GD.Print("[AttemptReconnect] Attempting to reconnect...");
@@ -535,6 +567,9 @@ public partial class TwitchConnection : Node
 		}
 	}
 
+	/// <summary>
+	/// Sends a chat message from the chat responses list
+	/// </summary>
 	private void SendChatMessage()
 	{
 		if (chatResponses.Count > 0)
@@ -545,6 +580,9 @@ public partial class TwitchConnection : Node
 		}
 	}
 
+	/// <summary>
+	/// Gets the chat badge data from twitch for global and channel specific badges
+	/// </summary>
 	private async void GetChatBadges()
 	{
 		// global chat badges
@@ -555,6 +593,10 @@ public partial class TwitchConnection : Node
 		await ToSignal(this, SignalName.BadgeCategoryReceived);
 	}
 
+	/// <summary>
+	/// Gets the chat badge data from a given URL
+	/// </summary>
+	/// <param name="url"></param>
 	private async void GetBadgesFromURL(string url)
 	{
 		var request = new HttpRequest();
@@ -585,6 +627,10 @@ public partial class TwitchConnection : Node
 		EmitSignal(SignalName.BadgeCategoryReceived);
 	}
 
+	/// <summary>
+	/// Loads the client id and client secret from the config file
+	/// </summary>
+	/// <returns></returns>
 	private bool LoadConfig()
 	{
 		var config = new ConfigFile();
@@ -603,6 +649,7 @@ public partial class TwitchConnection : Node
 	}
 
     /// <summary>
+	/// Connects the application to the twitch eventsub.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L387
     /// </summary>
     private void ConnectWebSocket()
@@ -618,11 +665,12 @@ public partial class TwitchConnection : Node
 	}
 
     /// <summary>
+	/// Subscribes to a given event.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L396
     /// </summary>
-    /// <param name="eventName"></param>
-    /// <param name="version"></param>
-    /// <param name="conditions"></param>
+    /// <param name="eventName">The name of the event</param>
+    /// <param name="version">the given version</param>
+    /// <param name="conditions">the conditions required by twitch</param>
     public async void SubscribeToEvent(string eventName, int version, Dictionary conditions)
 	{
 		var data = new Dictionary()
@@ -687,6 +735,7 @@ public partial class TwitchConnection : Node
 	}
 
     /// <summary>
+	/// Processes an event.
     /// Based on https://github.com/issork/gift/blob/0545456faa8537a86bb266fe1df8fd3d06505358/addons/gift/gift_node.gd#L348
     /// </summary>
     /// <param name="data"></param>
@@ -719,18 +768,16 @@ public partial class TwitchConnection : Node
 				}
 			case "session_reconnect":
 				{
-					eventsubRestarting = true;
 					eventsubReconnectURL = (string)((Dictionary)payload["session"])["reconnect_url"];
-					GD.Print($"[ProcessEvent] {message}");
+					GD.Print($"[ProcessEvent] Session reconnect {message}");
 					EmitSignal(SignalName.EventsReconnect);
 					break;
 				}
 			case "revocation":
 				{
-					//events_revoked.emit(payload["subscription"]["type"], payload["subscription"]["status"])
 					var type = (string)((Dictionary)payload["subscription"])["type"];
 					var status = (string)((Dictionary)payload["subscription"])["status"];
-					GD.Print($"[ProcessEvent] {message}");
+					GD.Print($"[ProcessEvent] Revocation: {message}");
 					EmitSignal(SignalName.EventsRevoked, type, status);
 					break;
 				}
@@ -771,7 +818,6 @@ public partial class TwitchConnection : Node
 
 		chatResponses ??= new List<ChatResponse>();
 
-		PlayerDatas = new();
 		Authenticated += ConnectToTwitch;
 		Authenticated += GetChatBadges;
 		Authenticated += ConnectWebSocket;
@@ -830,7 +876,16 @@ public partial class TwitchConnection : Node
 		}
 	}
 
-	private class ChatResponse
+    public override void _ExitTree()
+    {
+		if (TwitchClient.Connected)
+		{
+			writer.WriteLine($"PART #{Channel}");
+		}
+        base._ExitTree();
+    }
+
+    private class ChatResponse
 	{
 		private string MessageText { get; set; }
 		private string Channel { get; set; }

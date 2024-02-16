@@ -1,24 +1,47 @@
 using Godot;
 using System;
+
+/// <summary>
+/// Node for use as a player marble
+/// </summary>
 public partial class PlayerMarble : Node3D
 {
 	#region Fields
+	/// <summary>The player's user id</summary>
 	public string ID;
+	/// <summary>Reference to the marble track</summary>
 	private MarbleTrack marbleTrack;
+	/// <summary>Reference to the box container that contains the name and the badges</summary>
 	[Export] private BoxContainer boxContainer;
+	/// <summary>Reference to the mesh instance of the marble</summary>
 	[Export] private MeshInstance3D meshInstance;
+	/// <summary>Reference to the label that displays the name</summary>
 	[Export] private RichTextLabel label;
+	/// <summary>Reference to the player's rigidbody</summary>
 	[Export] private RigidBody3D rigidBody;
+	/// <summary>List of texture recs for displaying the marbles</summary>
 	[Export] private TextureRect[] badges;
+	/// <summary>Offset for name display</summary>
 	[Export] private Vector2 offset;
+
+	/// <summary>The player's name</summary>
 	private string playerName;
+	/// <summary>The player's color</summary>
 	private string color;
 
+	/// <summary>Signal that gets emitted when a player marble gets destructed/// </summary>
+	/// <param name="id"></param>
 	[Signal]
 	public delegate void OnMarbleDestructionEventHandler(string id);
 	#endregion
 
 	#region Methods
+	/// <summary>
+	/// Initializes the marble
+	/// </summary>
+	/// <param name="id">The player's id</param>
+	/// <param name="badges">The player's badges</param>
+	/// <param name="marbleTrack">Reference to the marble track</param>
 	public async void InitMarble(string id, string badges, MarbleTrack marbleTrack)
 	{
 		this.marbleTrack = marbleTrack;
@@ -50,7 +73,7 @@ public partial class PlayerMarble : Node3D
 		{
 			if (badge == string.Empty) continue;
 			GD.Print($"[InitMarble] Marble {Name}: Getting badge {badge}");
-			//if (badge.Contains("subscriber")) continue;
+
 			if (!twitchGlobals.TryGetBadge(badge, out ImageTexture imageTexture))
 			{
 				twitchGlobals.DownloadBadge(badge);
@@ -71,6 +94,10 @@ public partial class PlayerMarble : Node3D
 		}
 	}
 
+	/// <summary>
+	/// Sets a custom marble color by applying a new material
+	/// </summary>
+	/// <param name="color">The color of the new material</param>
 	public void SetCustomColor(Color color)
 	{
 		StandardMaterial3D material = new();
@@ -78,6 +105,8 @@ public partial class PlayerMarble : Node3D
 		meshInstance.MaterialOverride = material;
 	}
 
+	/// <summary>Makes the camera rotate around this marble</summary>
+	/// <param name="event"></param>
 	public void SetViewTarget(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton button)
@@ -86,16 +115,22 @@ public partial class PlayerMarble : Node3D
 			{
 				var cam = marbleTrack.TrackManager.Camera;
 				cam.SetReferenceMarble(rigidBody, ID);
-				// marbleTrack.TrackManager.ShowCard(ID);
 			}
 		}
 	}
 
+	/// <summary>
+	/// Checks if the marble is below the death level
+	/// </summary>
+	/// <returns></returns>
 	private bool IsBelowDeathLevel()
 	{
 		return marbleTrack.DeathHeight > rigidBody.GlobalPosition.Y;
 	}
 
+	/// <summary>
+	/// Removes the marble if it's below the death plane
+	/// </summary>
 	private void CheckDeathPlane()
 	{
 		if (IsBelowDeathLevel())
@@ -108,22 +143,24 @@ public partial class PlayerMarble : Node3D
 		}
 	}
 
+	/// <summary>
+	/// Sets the freeze property of the rigidbody
+	/// </summary>
+	/// <param name="freeze"></param>
 	public void SetFreeze(bool freeze)
 	{
 		rigidBody.Freeze = freeze;
 	}
 
+	/// <summary>
+	/// Updates the marble's name display position
+	/// </summary>
 	private void UpdateLabelPosition()
 	{
 		boxContainer.GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(rigidBody.GlobalPosition) - new Vector2(boxContainer.Size.X, 2 * boxContainer.Size.Y) / 2f;
 		boxContainer.Visible = !GetViewport().GetCamera3D().IsPositionBehind(rigidBody.GlobalPosition);
 	}
 	#endregion
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)

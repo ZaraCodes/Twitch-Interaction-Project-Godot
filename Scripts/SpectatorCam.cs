@@ -1,34 +1,54 @@
 using Godot;
 using System;
 
+/// <summary>
+/// Script for controlling the camera
+/// </summary>
 public partial class SpectatorCam : Camera3D
 {
+	/// <summary>The speed at which the camera will fly</summary>
 	[Export]
 	private float speed = 5f;
+	/// <summary>The max speed the spectator can set</summary>
 	[Export]
 	private float maxSpeed = 50f;
+	/// <summary>The smallest distance to a marble if the camera is following a marble</summary>
 	[Export]
 	private float minDistanceToMarble = 1f;
+	/// <summary>Reference to the node that the camera will rotate instead if it's following a marble</summary>
 	[Export]
 	private Node3D RotationPoint;
 
+	/// <summary>/// The mouse movement on the screen</summary>
 	private Vector2 mouseMovement;
 
+	/// <summary>Tracks the rotation around the x axis</summary>
 	private float rotationX;
 
+	/// <summary>Speed change during a frame if the player uses the mouse wheel</summary>
 	private float speedDiff;
 
 	private Vector2 mouseCoords;
 	private Vector2 mouseCoordsCache;
 
+	/// <summary>Reference to the marble that the camera rotates around and follows</summary>
 	private Node3D referencedMarble;
 
+	/// <summary>The position the camera was at at the start of the game</summary>
 	private Vector3 startPosition;
 
+	/// <summary>The rotation the camera had at the start of the game</summary>
 	private Vector3 startRotation;
-
+	
+	/// <summary>
+	/// The ID of the player that the camera follows
+	/// </summary>
 	public string RefId { get; set; }
 
+	/// <summary>
+	/// Moves and rotates the camera
+	/// </summary>
+	/// <param name="delta">time since the last frame</param>
 	private void Move(double delta)
 	{
 		HandleRotation(delta);
@@ -43,7 +63,11 @@ public partial class SpectatorCam : Camera3D
 		}
 	}
 
-	private void HandleMovement(double delta)
+    /// <summary>
+    /// Handles the movement
+    /// </summary>
+    /// <param name="delta">time since the last frame</param>
+    private void HandleMovement(double delta)
 	{
 		var direction = GetMovementVector();
 		if (direction.Length() <= 0) return;
@@ -57,7 +81,11 @@ public partial class SpectatorCam : Camera3D
 		}
 	}
 
-	private void HandleRotation(double delta)
+    /// <summary>
+    /// Handles the rotation
+    /// </summary>
+    /// <param name="delta">time since the last frame</param>
+    private void HandleRotation(double delta)
 	{
 		if (Input.IsActionPressed("rotate_camera"))
 		{
@@ -88,6 +116,9 @@ public partial class SpectatorCam : Camera3D
 		}
 	}
 
+	/// <summary>Sets a reference marble</summary>
+	/// <param name="marble"></param>
+	/// <param name="id"></param>
 	public void SetReferenceMarble(Node3D marble, string id)
 	{
 		referencedMarble = marble;
@@ -110,6 +141,9 @@ public partial class SpectatorCam : Camera3D
 		return direction.Normalized();
 	}
 
+	/// <summary>
+	/// Resets the marble to follow to null so the camera will move normally again
+	/// </summary>
 	public void UnfollowCam()
 	{
         referencedMarble = null;
@@ -122,13 +156,20 @@ public partial class SpectatorCam : Camera3D
 		RefId = string.Empty;
     }
 
-	public void ResetPosition()
+	/// <summary>
+	/// Resets the camera
+	/// </summary>
+	public void Reset()
 	{
 		if (referencedMarble != null) UnfollowCam();
 		Position = startPosition;
 		Rotation = startRotation;
 	}
 
+	/// <summary>
+	/// Processes mouse input
+	/// </summary>
+	/// <param name="event"></param>
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventMouseMotion motionEvent)

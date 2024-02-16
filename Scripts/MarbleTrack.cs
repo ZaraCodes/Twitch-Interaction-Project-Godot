@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// Node that contains everything needed for a track
+/// </summary>
 public partial class MarbleTrack : Node3D
 {
 	#region Fields
@@ -35,18 +38,20 @@ public partial class MarbleTrack : Node3D
 	public int FinishedPlayers { get; private set; }
 	/// <summary>The amount of players that didn't make it</summary>
 	public int DeadPlayers { get; private set; }
-	/// <summary>
-	/// 
-	/// </summary>
+	/// <summary>The amount of players that joined the race</summary>
 	public int MaxJoinedPlayers { get; private set; }
-
+	/// <summary>List of players that joined the race</summary>
 	public List<string> JoinedPlayers { get; private set; }
 
+	/// <summary>Signal that gets emitted when the track gets reset</summary>
 	[Signal]
 	public delegate void OnResetEventHandler();
 	#endregion
 
 	#region Methods
+	/// <summary>
+	/// Initializes the spawnpoints
+	/// </summary>
 	private void InitSpawnpoints()
 	{
 		spawnPoints = new();
@@ -57,6 +62,9 @@ public partial class MarbleTrack : Node3D
 		maxPlayerCount = spawnPoints.Count;
 	}
 
+	/// <summary>
+	/// Initializes the title bar
+	/// </summary>
 	private void InitTitleBar()
 	{
 		TrackManager.TitleBar.PlayerNumbers.Text = $"{CurrentPlayerCount}/{maxPlayerCount}";
@@ -64,6 +72,10 @@ public partial class MarbleTrack : Node3D
 		TrackManager.InitLevel(this);
 	}
 
+	/// <summary>
+	/// Receives a message and joins the player who sent it the race
+	/// </summary>
+	/// <param name="message"></param>
 	public void HandleJoinMessage(Dictionary message)
 	{
 		if (!allowMarblesSpawning) return;
@@ -83,6 +95,10 @@ public partial class MarbleTrack : Node3D
 		}
 	}
 
+	/// <summary>
+	/// Spawns a marble using data from the player's message
+	/// </summary>
+	/// <param name="message"></param>
 	public void SpawnMarble(Dictionary message)
 	{
 		PlayerMarble newMarble = (PlayerMarble)packedMarbleScene.Instantiate();
@@ -99,6 +115,12 @@ public partial class MarbleTrack : Node3D
 		TrackManager.CreateSpawnMessage((string)message["DisplayName"], (string)message["Color"]);
 	}
 
+	/// <summary>
+	/// Spawns a marble with test data
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="DisplayName"></param>
+	/// <param name="color"></param>
 	public void SpawnMarble(string id, string DisplayName, string color)
 	{
 		TwitchGlobals.AddPlayerData(id, DisplayName, color);
@@ -113,6 +135,9 @@ public partial class MarbleTrack : Node3D
 		newMarble.InitMarble(id, "", this);
 	}
 
+	/// <summary>
+	/// Fills the marble track with test marbles
+	/// </summary>
 	public void TestTrack()
 	{
 		if (!allowMarblesSpawning) return;
@@ -125,6 +150,9 @@ public partial class MarbleTrack : Node3D
 		}
 	}
 
+	/// <summary>
+	/// Starts the race by unfreezing the marbles
+	/// </summary>
 	public void StartGame()
 	{
 		DeadPlayers = 0;
@@ -138,6 +166,10 @@ public partial class MarbleTrack : Node3D
 		}
 	}
 
+	/// <summary>
+	/// Removes a player that fell off the track
+	/// </summary>
+	/// <param name="id"></param>
 	public void RemoveOnePlayer(string id)
 	{
         var player = new Dictionary
@@ -153,6 +185,9 @@ public partial class MarbleTrack : Node3D
 		HasGameEnded();
     }
 
+	/// <summary>
+	/// Checks if the game has ended yet
+	/// </summary>
 	private void HasGameEnded()
 	{
         CurrentPlayerCount--;
@@ -164,6 +199,10 @@ public partial class MarbleTrack : Node3D
         }
     }
 
+	/// <summary>
+	/// Lets a player finish
+	/// </summary>
+	/// <param name="id"></param>
     public void FinishPlayer(string id)
 	{
 		FinishedPlayers++;
@@ -180,6 +219,9 @@ public partial class MarbleTrack : Node3D
 		HasGameEnded();
     }
 
+	/// <summary>
+	/// Resets the track
+	/// </summary>
 	public void Reset()
 	{
 		TrackManager.FinishedPlayers.Clear();
@@ -195,10 +237,13 @@ public partial class MarbleTrack : Node3D
 		TrackManager.WinningPage.Hide();
 		TrackManager.TitleBar.Reset();
 		TrackManager.RaceTime.Reset();
-		TrackManager.Camera.ResetPosition();
+		TrackManager.Camera.Reset();
 		EmitSignal(SignalName.OnReset);
 	}
 
+	/// <summary>
+	/// Deletes all marbles on the track
+	/// </summary>
 	private void DeleteMarbles()
 	{
 		foreach (var node in marblesParent.GetChildren())
@@ -207,6 +252,11 @@ public partial class MarbleTrack : Node3D
 		}
 	}
 
+	/// <summary>
+	/// Colors a marble
+	/// </summary>
+	/// <param name="id"></param>
+	/// <param name="color"></param>
 	public void ColorMarble(string id, Color color)
 	{
 		PlayerMarble marble = null;
@@ -238,10 +288,5 @@ public partial class MarbleTrack : Node3D
 		allowMarblesSpawning = true;
 		rng = new();
 		JoinedPlayers = new();
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

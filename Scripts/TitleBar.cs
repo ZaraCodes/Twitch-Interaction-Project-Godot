@@ -103,9 +103,9 @@ public partial class TitleBar : HBoxContainer
     #region Godot Stuff
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
-	{
+    {
         packedJoinMessageScene = GD.Load<PackedScene>("res://Scenes/join_message.tscn");
         SetPromptToJoin();
-	}
+    }
     #endregion
 }

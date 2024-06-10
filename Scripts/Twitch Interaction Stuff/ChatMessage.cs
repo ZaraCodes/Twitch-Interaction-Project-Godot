@@ -3,8 +3,18 @@ using Godot.Collections;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// This class contains a static method to parse an incoming chat message
+/// </summary>
 public class ChatMessage
 {
+    /// <summary>
+    /// Parses the metadata of a message into a dictionary for easier access
+    /// </summary>
+    /// <param name="rawMetadata">The metadata of the message</param>
+    /// <param name="message">The text of the message</param>
+    /// <param name="chatter">The chatter's name</param>
+    /// <returns></returns>
     public static Dictionary CreateMessage(string rawMetadata, string message, string chatter)
     {
         var newMsg = new Dictionary

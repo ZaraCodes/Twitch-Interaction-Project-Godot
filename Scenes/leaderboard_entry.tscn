@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://bohcin38mybq1"]
+
+[ext_resource type="Script" path="res://Scripts/UI/LeaderboardEntry.cs" id="1_ts376"]
+
+[node name="Leaderboard Entry" type="HBoxContainer" node_paths=PackedStringArray("positionLabel", "nameLabel", "timeLabel")]
+custom_minimum_size = Vector2(400, 0)
+alignment = 1
+script = ExtResource("1_ts376")
+positionLabel = NodePath("Position Label")
+nameLabel = NodePath("Name Label")
+timeLabel = NodePath("Time Label")
+
+[node name="Position Label" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "2)"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="VSeparator" type="VSeparator" parent="."]
+layout_mode = 2
+
+[node name="Name Label" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "PLAYERNAME"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="VSeparator2" type="VSeparator" parent="."]
+layout_mode = 2
+
+[node name="Time Label" type="RichTextLabel" parent="."]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "--:--.---"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false

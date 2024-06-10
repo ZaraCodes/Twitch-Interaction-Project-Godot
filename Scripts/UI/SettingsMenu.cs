@@ -1,66 +1,71 @@
 using Godot;
 using System;
 
+/// <summary>
+/// Node that contains the settings menu
+/// </summary>
 public partial class SettingsMenu : Control
 {
-	private string channelName;
+	/// <summary>Reference to the main menu node</summary>
 	[Export]
 	private Control mainMenu;
+	/// <summary>Reference to the settings menu node</summary>
 	[Export]
 	private Control settingsMenu;
+	/// <summary>Reference to the label that displays if the authentication was successful or not</summary>
 	[Export]
 	private Label responseMessage;
 
-	public void SaveConfig()
-	{
-		var config = new ConfigFile();
-
-		// store some values
-		config.SetValue("ConnectionSettings", "Channel", channelName);
-
-		// save file (overwrite)
-		config.Save("user://config.cfg");
-	}
-
-	public void SetChannelName(string channelName)
-	{
-		this.channelName = channelName;
-	}
-
+	/// <summary>
+	/// Sets up the signal responses and connects the application to twitch
+	/// </summary>
 	public void ConnectToTwitch()
 	{
         var twitchConnector = GetNode<TwitchConnection>("/root/TwitchConnection");
 
 		twitchConnector.Authenticated += OnAuthenticated;
-		twitchConnector.AuthenticationFailed += () => responseMessage.Text = "Authentication failed";
+		twitchConnector.AuthenticationFailed += OnAuthenticationFailed;
         twitchConnector.Authenticate();
     }
 
-	public void OnAuthenticated()
+	/// <summary>
+	/// Displays a success message in the label
+	/// </summary>
+    private void OnAuthenticated()
 	{
 		responseMessage.Text = "Authentication successful";
-
     }
 
+	/// <summary>
+	/// Displays a failure message in the label
+	/// </summary>
+	private void OnAuthenticationFailed()
+	{
+        responseMessage.Text = "Authentication failed";
+    }
 
-
+	/// <summary>
+	/// Returns back to the main menu
+	/// </summary>
     public void GoBackToMainMenu()
 	{
 		RequestReady();
 
-		SaveConfig();
 		mainMenu.Show();
 		settingsMenu.Hide();
+	}
+
+	/// <summary>
+	/// Opens the user data folder
+	/// </summary>
+	public void OpenUserDataFolder()
+	{
+		OS.ShellShowInFileManager(ProjectSettings.GlobalizePath("user://"));
 	}
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		responseMessage.Text = " ";
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
 	}
 }

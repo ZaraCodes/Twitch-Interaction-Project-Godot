@@ -1,32 +1,37 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhwi6agbslm1t"]
+[gd_scene load_steps=5 format=3 uid="uid://bhwi6agbslm1t"]
 
 [ext_resource type="ArrayMesh" uid="uid://q3kuvv2afldg" path="res://Models/Marble Kit/marble_low.obj" id="1_lolmh"]
 [ext_resource type="Script" path="res://Scripts/PlayerMarble.cs" id="1_vlwqc"]
+[ext_resource type="Material" uid="uid://tbqym0ydma40" path="res://marbe_mat.tres" id="2_h6qwm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xehja"]
-radius = 0.209089
+radius = 0.25
 
-[node name="PlayerMarble" type="Node3D" node_paths=PackedStringArray("boxContainer", "label", "rigidBody", "badges")]
+[node name="PlayerMarble" type="Node3D" node_paths=PackedStringArray("boxContainer", "meshInstance", "label", "rigidBody", "badges")]
 script = ExtResource("1_vlwqc")
 boxContainer = NodePath("Player Display")
+meshInstance = NodePath("Marble/MeshInstance3D")
 label = NodePath("Player Display/RichTextLabel")
 rigidBody = NodePath("Marble")
 badges = [NodePath("Player Display/VBoxContainer/Badge 3"), NodePath("Player Display/VBoxContainer2/Badge 2"), NodePath("Player Display/VBoxContainer3/Badge 1")]
 offset = Vector2(0, -10)
 
 [node name="Marble" type="RigidBody3D" parent="."]
-mass = 4.0
+mass = 100.0
 freeze = true
+continuous_cd = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Marble"]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
 shape = SubResource("SphereShape3D_xehja")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Marble"]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
 mesh = ExtResource("1_lolmh")
+surface_material_override/0 = ExtResource("2_h6qwm")
 
 [node name="Player Display" type="HBoxContainer" parent="."]
+z_index = -2
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -77,3 +82,4 @@ scroll_active = false
 autowrap_mode = 0
 
 [connection signal="gui_input" from="Player Display" to="." method="SetViewTarget"]
+[connection signal="gui_input" from="Player Display/RichTextLabel" to="." method="SetViewTarget"]
